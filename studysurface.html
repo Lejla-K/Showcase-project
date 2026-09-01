@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Study Surface — plan header + day timeline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="studysurface.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ══ sidebar ══ -->
+  <aside class="sidebar">
+    <div class="sb-top">
+      <span class="sb-dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      <span class="sb-btn">⌕</span><span class="sb-btn">L</span>
+    </div>
+    <nav class="sb-nav">
+      <button class="sb-item" aria-current="page">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 6l6-4 6 4v7a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/></svg>My Plan</button>
+      <button class="sb-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="2.5" width="11" height="11" rx="2"/><path d="M5.5 6.5h5M5.5 9.5h3"/></svg>Homework <span class="end">🔒</span></button>
+      <button class="sb-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6"/><path d="M5.5 8l2 2 3.5-4"/></svg>Review &amp; Camo <span class="end">⌄</span></button>
+      <button class="sb-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 12l4-5 3 2.5 4-6"/></svg>Analytics <span class="end">⌄</span></button>
+      <button class="sb-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3h10v10H3z"/><path d="M6 3v10"/></svg>Book Extras <span class="end">⌄</span></button>
+      <button class="sb-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 2.5h8v11l-4-3-4 3z"/></svg>My Stuff</button>
+      <button class="sb-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="5" cy="8" r="2.4"/><circle cx="11" cy="8" r="2.4"/><path d="M1.5 8h1.1M13.4 8h1.1M7.4 8h1.2"/></svg>AI Ellen</button>
+    </nav>
+  </aside>
+
+  <div class="main">
+
+    <!-- ══ plan header ══ -->
+    <header class="band">
+      <div class="band-row">
+        <h1 class="plan-title">Lejla's Plan 📚</h1>
+        <div class="band-actions">
+          <button class="pill-btn">Adjust plan</button>
+          <button class="pill-btn">Tell Ellen ᯤ</button>
+        </div>
+      </div>
+
+      <!-- plan strip: one chapter per plan, one cell per week.
+           Widths are real — Tandem is 21 days against Perform's 22. -->
+      <div class="strip-wrap">
+        <span class="strip-end">Ends Nov 14 · 🚩 LSAT Nov 15</span>
+        <span class="stage-flag" style="left:12%">Translation · now</span>
+        <div class="track">
+          <div class="chapter current" role="button" tabindex="0" style="flex:21">
+            <span class="cell done"></span><span class="cell done"></span><span class="cell stage"></span>
+            <span class="ch-label">Tandem</span>
+            <span class="tip">Tandem Plan · 21 days · Jun 25 – Jul 15</span>
+          </div>
+          <div class="chapter" role="button" tabindex="0" style="flex:36">
+            <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+            <span class="ch-label">RC</span>
+            <span class="tip">RC Plan · 36 days · Jul 16 – Aug 20</span>
+          </div>
+          <div class="chapter" role="button" tabindex="0" style="flex:29">
+            <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+            <span class="ch-label">Accuracy</span>
+            <span class="tip">Accuracy Plan · 29 days · Aug 21 – Sep 18</span>
+          </div>
+          <div class="chapter" role="button" tabindex="0" style="flex:35">
+            <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+            <span class="ch-label">Speed</span>
+            <span class="tip">Speed Plan · 35 days · Sep 19 – Oct 23</span>
+          </div>
+          <div class="chapter" role="button" tabindex="0" style="flex:22">
+            <span class="cell"></span><span class="cell"></span><span class="cell"></span>
+            <span class="ch-label">Perform</span>
+            <span class="tip">Perform Plan · 22 days · Oct 24 – Nov 14</span>
+          </div>
+        </div>
+        <span class="playhead" style="left:13.5%"></span>
+        <div class="mile-wrap" style="left:10%"><span class="mile reached"></span><span class="tip">Translation starts · Jul 9</span></div>
+        <div class="mile-wrap" style="left:43%"><span class="mile"></span><span class="tip">First stopwatch LR · Aug 25</span></div>
+        <div class="mile-wrap" style="left:48%"><span class="mile"></span><span class="tip">First stopwatch RC · Sep 2</span></div>
+        <div class="mile-wrap" style="left:69%"><span class="mile"></span><span class="tip">First timed LR + RC · Oct 1</span></div>
+        <div class="mile-wrap" style="left:82%"><span class="mile"></span><span class="tip">First PT · Oct 20</span></div>
+      </div>
+
+      <div class="resume">
+        <span class="resume-kicker">Jump back in!</span>
+        <span class="resume-task"><b>What is Reading? (you are not broken)</b><span>15m · Translation 2.0</span></span>
+        <button class="start">Start</button>
+      </div>
+    </header>
+
+    <!-- ══ body ══ -->
+    <div class="body">
+
+      <aside class="rail">
+        <section class="rail-card">
+          <div class="rail-head">Day-by-day study schedule</div>
+          <div class="plan-list">
+            <div class="plan-item current">
+              <div class="plan-item-name"><span>◷</span><span>Tandem Plan</span></div>
+              <div class="book">Include book <span class="mini-switch"></span></div>
+            </div>
+            <button class="plan-item is-off"><span class="n">2.</span> RC Plan</button>
+            <button class="plan-item is-off"><span class="n">3.</span> Accuracy Plan</button>
+            <button class="plan-item is-off"><span class="n">4.</span> Speed Plan</button>
+            <button class="plan-item is-off"><span class="n">5.</span> Perform Plan</button>
+          </div>
+          <p class="rail-note">Change your plan any time — ask AI Ellen, or use Adjust plan.</p>
+        </section>
+
+        <section class="rail-card is-now">
+          <div class="rail-head">Prep Map <span class="lookup">⌕ Lookup</span></div>
+
+          <!-- the goal ladder is plan-scoped, not daily, so it sits here -->
+          <div class="rail-goal">
+            <div class="rail-goal-top">
+              <span class="rg-label">Working toward</span>
+              <div class="sect-toggle" role="group" aria-label="Section">
+                <button aria-pressed="true" onclick="pickSection(this,'lr')">LR</button>
+                <button aria-pressed="false" onclick="pickSection(this,'rc')">RC</button>
+              </div>
+            </div>
+            <div class="goal-body" id="goal-lr"><b>Translation + CLIR</b></div>
+            <div class="goal-body" id="goal-rc" hidden><b>Diagram without stalling</b></div>
+            <span class="metric metric-time" id="metric-lr">
+              <b>31:40</b><span class="arrow">→</span><span class="target">25:00</span>
+            </span>
+            <span class="metric" id="metric-rc" hidden>
+              <span class="metric-boxes">
+                <span class="on"></span><span class="on"></span><span class="on"></span>
+                <span></span><span></span><span></span><span></span><span></span>
+              </span><span class="frac">3/8</span>
+            </span>
+          </div>
+
+          <div class="stage" data-stage="Learn">
+            <div class="stage-top"><span class="stage-name">Learn</span><span class="stage-count">8/8 Knowledges Gained</span></div>
+            <div class="pips"><span class="pip filled"></span><span class="pip filled"></span><span class="pip filled"></span><span class="pip filled"></span><span class="pip filled"></span><span class="pip filled"></span><span class="pip filled"></span><span class="pip filled"></span></div>
+          </div>
+          <div class="stage is-now" data-stage="Translation">
+            <div class="stage-top"><span class="stage-name">Translation</span><span class="stage-count">2/8 Routines Mastered</span></div>
+            <div class="pips"><span class="pip filled"></span><span class="pip filled"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span></div>
+          </div>
+          <div class="stage is-off" data-stage="Accuracy">
+            <div class="stage-top"><span class="stage-name">Accuracy</span><span class="stage-count">0/8 Problems Fixed</span></div>
+            <div class="pips"><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span></div>
+          </div>
+          <div class="stage is-off" data-stage="Speed">
+            <div class="stage-top"><span class="stage-name">Speed</span><span class="stage-count">0/8 Zoomies Experienced</span></div>
+            <div class="pips"><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span></div>
+          </div>
+          <div class="stage is-off" data-stage="Perform">
+            <div class="stage-top"><span class="stage-name">Perform</span><span class="stage-count">0/8 Mindsets Nourished</span></div>
+            <div class="pips"><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span></div>
+          </div>
+        </section>
+
+        <section class="rail-card">
+          <div class="rail-head">My Workouts</div>
+          <div class="saved-list" id="my-workouts"></div>
+          <p class="empty-state" id="empty-workouts">Bookmark workouts from any Workout Menu to add them to My Workouts.</p>
+        </section>
+
+        <section class="rail-card">
+          <div class="rail-head">My Routines</div>
+          <div class="saved-list" id="my-routines"></div>
+          <p class="empty-state" id="empty-routines">Bookmark routines from your plan to add them to My Routines.</p>
+        </section>
+
+        <section class="rail-card">
+          <div class="rail-head">Video Course Review</div>
+          <div class="locked-row">My Saved Videos</div>
+          <div class="locked-row">My History</div>
+          <div class="locked-row is-off">Concept Review <span class="end">🔒</span></div>
+        </section>
+      </aside>
+
+      <main class="timeline">
+
+        <div class="day-bar">
+          <!-- View first, then the day. The date pill is the only statement of
+               which day this is; "Today" appears only when you have navigated
+               away from it, as the way back. -->
+          <div class="switcher" role="group" aria-label="View">
+            <button aria-pressed="true">Day timeline</button>
+            <button aria-pressed="false">Weekly</button>
+            <button aria-pressed="false">Full Plan</button>
+          </div>
+
+          <div class="day-nav">
+            <button class="step" aria-label="Previous day" onclick="stepDay(-1)">‹</button>
+            <button class="date-pill" id="date-pill">Wednesday, Jul 15 <span class="caret-sm">▾</span></button>
+            <button class="step" aria-label="Next day" onclick="stepDay(1)">›</button>
+          </div>
+          <button class="back-today" id="back-today" hidden onclick="stepDay(0)">Back to today</button>
+
+          <div class="bar-right">
+            <button class="toggle" id="hide-done" aria-pressed="false" onclick="hideDone(this)">
+              <span class="switch"></span> Hide completed <span class="hidden-count">(5)</span>
+            </button>
+            <!-- the library's Progress component: eight steps, 12.5% each -->
+            <span class="day-progress">
+              <span class="pips" id="day-meter">
+                <span class="pip filled"></span><span class="pip filled"></span><span class="pip filled"></span>
+                <span class="pip"></span><span class="pip"></span><span class="pip"></span>
+                <span class="pip"></span><span class="pip"></span>
+              </span>
+              <span class="frac" id="day-frac">5 of 12</span>
+            </span>
+          </div>
+        </div>
+
+
+        <!-- completed group, collapsed -->
+        <section class="group done" data-open="false">
+          <button class="group-head" onclick="toggleGroup(this)">
+            <span class="caret">⌄</span> Warm up <span class="meta">4 items · all done ✓</span>
+          </button>
+          <div class="group-body">
+            <article class="task checked"><div class="task-row">
+              <button class="cb" onclick="toggleTask(this)"><svg viewBox="0 0 10 10" stroke="#000" stroke-width="1.8" fill="none"><path d="M2 5l2 2 4-4"/></svg></button>
+              <span class="t-num">1.</span>
+              <svg class="t-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="1.8"/></svg>
+              <span class="dot none" data-clir="No CLIR focus" aria-label="No CLIR focus"></span><span class="t-title">Basic Translation Drill</span>
+              <span class="t-time">7:30 am · 10m</span></div></article>
+            <article class="task checked"><div class="task-row">
+              <button class="cb" onclick="toggleTask(this)"><svg viewBox="0 0 10 10" stroke="#000" stroke-width="1.8" fill="none"><path d="M2 5l2 2 4-4"/></svg></button>
+              <span class="t-num">2.</span>
+              <svg class="t-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1.5" y="3" width="13" height="10" rx="2"/><path d="M6.5 6.2l4 1.8-4 1.8z" fill="currentColor" stroke="none"/></svg>
+              <span class="dot none" data-clir="No CLIR focus" aria-label="No CLIR focus"></span><span class="t-title">Why the answers lie to you</span>
+              <span class="t-time">7:40 am · 8m</span></div></article>
+            <article class="task checked"><div class="task-row">
+              <button class="cb" onclick="toggleTask(this)"><svg viewBox="0 0 10 10" stroke="#000" stroke-width="1.8" fill="none"><path d="M2 5l2 2 4-4"/></svg></button>
+              <span class="t-num">3.</span>
+              <svg class="t-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="1.8"/></svg>
+              <span class="dot" data-clir="Resolution — paradoxes" aria-label="CLIR: Resolution — paradoxes">R</span><span class="t-title">CLIR Drill — mixed stimuli</span>
+              <span class="t-time">7:48 am · 12m</span></div></article>
+            <article class="task checked"><div class="task-row">
+              <button class="cb" onclick="toggleTask(this)"><svg viewBox="0 0 10 10" stroke="#000" stroke-width="1.8" fill="none"><path d="M2 5l2 2 4-4"/></svg></button>
+              <span class="t-num">4.</span>
+              <svg class="t-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11.2 2.6l2.2 2.2-8 8-3 .8.8-3z"/></svg>
+              <span class="dot none" data-clir="No CLIR focus" aria-label="No CLIR focus"></span><span class="t-title">Log yesterday's misses</span>
+              <span class="t-time">8:00 am · 5m</span></div></article>
+          </div>
+        </section>
+
+        <!-- active group -->
+        <section class="group" data-open="true">
+          <button class="group-head" onclick="toggleGroup(this)">
+            <span class="caret">⌄</span> Translation 2.0 <span class="meta">1 of 6 done · 1h 40m left</span>
+          </button>
+          <div class="group-body">
+
+            <article class="task active">
+              <div class="task-row">
+                <button class="cb" onclick="toggleTask(this)"><svg viewBox="0 0 10 10" stroke="#000" stroke-width="1.8" fill="none"><path d="M2 5l2 2 4-4"/></svg></button>
+                <span class="t-num">1.</span>
+                <svg class="t-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1.5" y="3" width="13" height="10" rx="2"/><path d="M6.5 6.2l4 1.8-4 1.8z" fill="currentColor" stroke="none"/></svg>
+                <span class="dot none" data-clir="No CLIR focus" aria-label="No CLIR focus"></span>
+                <span class="t-title">What is Reading? (you are not broken)</span>
+                <span class="t-time">8:00 am · 15m</span>
+                <button class="t-more" aria-label="Task details">⋯</button>
+                <button class="t-launch" aria-label="Start task">↗</button>
+              </div>
+              <div class="notes">
+                <p>This one reframes everything that comes after it. If you've been reading LSAT stimuli the way you read a novel, <strong>you are not broken</strong> — you were taught a method that doesn't fit the test.</p>
+                <p>Watch it once without notes. Then come back to the routine below and run it on three stimuli.</p>
+                <div class="embed">
+                  <div class="embed-card">
+                    <div class="embed-top"><span class="dot none" data-clir="No CLIR focus" aria-label="No CLIR focus"></span><b>The Translation Routine</b>
+                      <span class="embed-kind">Routine</span>
+                      <button class="bookmark" aria-pressed="false" aria-label="Bookmark to My Routines"
+                              data-kind="routine" data-name="The Translation Routine" onclick="bm(this)">☆</button></div>
+                    <div class="embed-meta"><span>6 steps</span><span>run it on 3 stimuli</span></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="task"><div class="task-row">
+              <button class="cb" onclick="toggleTask(this)"><svg viewBox="0 0 10 10" stroke="#000" stroke-width="1.8" fill="none"><path d="M2 5l2 2 4-4"/></svg></button>
+              <span class="t-num">2.</span>
+              <svg class="t-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="1.8"/></svg>
+              <span class="dot none" data-clir="No CLIR focus" aria-label="No CLIR focus"></span><span class="t-title">Basic Translation Drill</span>
+              <span class="t-time">8:15 am · 20m</span>
+              <button class="t-more" aria-label="Task details">⋯</button>
+              <button class="t-launch" aria-label="Start task">↗</button></div></article>
+
+            <article class="task">
+              <div class="task-row">
+                <button class="cb" onclick="toggleTask(this)"><svg viewBox="0 0 10 10" stroke="#000" stroke-width="1.8" fill="none"><path d="M2 5l2 2 4-4"/></svg></button>
+                <span class="t-num">3.</span>
+                <svg class="t-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 14V2.5l8 3-8 3"/></svg>
+                <span class="dot" data-clir="Inference — premise sets" aria-label="CLIR: Inference — premise sets">I</span>
+                <span class="t-title">Checkpoint: Conditional Reasoning</span>
+                <span class="t-time">8:35 am · 10m</span>
+                <button class="t-more" aria-label="Task details">⋯</button>
+                <button class="t-launch" aria-label="Start task">↗</button>
+              </div>
+              <div class="notes">
+                <div class="field"><h4>Overview</h4><p>Conditionals are the grammar underneath half of Logical Reasoning. This point is where translation stops being a trick and starts being automatic.</p></div>
+                <div class="field"><h4>What this looks like</h4><p>You read "only if" and your hand moves before your brain argues with it.</p></div>
+                <div class="field"><h4>Goals</h4><p>Diagram, chain, and infer on conditional stimuli without hesitation.</p></div>
+                <div class="field"><h4>How to move on</h4><p>Two consecutive drills at 90% or better, with no more than one contrapositive slip.</p></div>
+              </div>
+            </article>
+
+            <article class="task"><div class="task-row">
+              <button class="cb" onclick="toggleTask(this)"><svg viewBox="0 0 10 10" stroke="#000" stroke-width="1.8" fill="none"><path d="M2 5l2 2 4-4"/></svg></button>
+              <span class="t-num">4.</span>
+              <svg class="t-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 3.5c2-1 4-1 6 0 2-1 4-1 6 0v9c-2-1-4-1-6 0-2-1-4-1-6 0z"/><path d="M8 3.5v9"/></svg>
+              <span class="dot none" data-clir="No CLIR focus" aria-label="No CLIR focus"></span><span class="t-title">Loophole Book — Chapter 4, pp. 88–103</span>
+              <span class="t-time">9:10 am · 30m</span>
+              <button class="t-more" aria-label="Task details">⋯</button>
+              <button class="t-launch" aria-label="Start task">↗</button></div></article>
+
+            <article class="task">
+              <div class="task-row">
+                <button class="cb" onclick="toggleTask(this)"><svg viewBox="0 0 10 10" stroke="#000" stroke-width="1.8" fill="none"><path d="M2 5l2 2 4-4"/></svg></button>
+                <span class="t-num">5.</span>
+                <svg class="t-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="1.8"/></svg>
+                <span class="dot" data-clir="Inference — premise sets" aria-label="CLIR: Inference — premise sets">I</span>
+                <span class="t-title">Workout Menu — pick one</span>
+                <span class="t-opt">(optional)</span>
+                <span class="t-time">9:40 am · 25m</span>
+                <button class="t-more" aria-label="Task details">⋯</button>
+                <button class="t-launch" aria-label="Start task">↗</button>
+              </div>
+              <div class="notes">
+                <div class="embed">
+                  <div class="embed-card">
+                    <div class="embed-top"><span class="dot" data-clir="Inference — premise sets" aria-label="CLIR: Inference — premise sets">I</span><b>Sufficient &amp; Necessary Sprint</b>
+                      <span class="embed-kind">Workout</span>
+                      <button class="bookmark" aria-pressed="false" aria-label="Bookmark to My Workouts"
+                              data-kind="workout" data-name="Sufficient &amp; Necessary Sprint" onclick="bm(this)">☆</button></div>
+                    <div class="embed-meta"><span>20 questions</span><span>25m</span><span>Conditionals</span></div>
+                  </div>
+                  <div class="embed-card">
+                    <div class="embed-top"><span class="dot" data-clir="Resolution — paradoxes" aria-label="CLIR: Resolution — paradoxes">R</span><b>Paradox Reps</b>
+                      <span class="embed-kind">Workout</span>
+                      <button class="bookmark" aria-pressed="false" aria-label="Bookmark to My Workouts"
+                              data-kind="workout" data-name="Paradox Reps" onclick="bm(this)">☆</button></div>
+                    <div class="embed-meta"><span>15 questions</span><span>18m</span><span>Resolution</span></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="task checked"><div class="task-row">
+              <button class="cb" onclick="toggleTask(this)"><svg viewBox="0 0 10 10" stroke="#000" stroke-width="1.8" fill="none"><path d="M2 5l2 2 4-4"/></svg></button>
+              <span class="t-num">6.</span>
+              <svg class="t-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="9" r="5.5"/><path d="M8 6v3l2 1.4M6.2 1.8h3.6"/></svg>
+              <span class="dot-set"><span class="dot" data-clir="Controversy — debates" aria-label="CLIR: Controversy — debates">C</span><span class="dot" data-clir="Loophole — arguments" aria-label="CLIR: Loophole — arguments">L</span><span class="dot" data-clir="Inference — premise sets" aria-label="CLIR: Inference — premise sets">I</span><span class="dot" data-clir="Resolution — paradoxes" aria-label="CLIR: Resolution — paradoxes">R</span></span>
+              <span class="t-title">Stopwatch-time LR section</span>
+              <span class="t-time">10:20 am · 35m</span>
+              <button class="t-more" aria-label="Task details">⋯</button>
+              <button class="t-launch" aria-label="Start task">↗</button></div></article>
+
+          </div>
+        </section>
+
+        <!-- tutor assignments: ordinary rows under the business name -->
+        <section class="group tutor" data-open="true">
+          <button class="group-head" onclick="toggleGroup(this)">
+            <span class="caret">⌄</span> Redline Prep <span class="who">Homework</span>
+            <span class="meta">0 of 2 done · 45m</span>
+          </button>
+          <div class="group-body">
+            <article class="task"><div class="task-row">
+              <button class="cb" onclick="toggleTask(this)"><svg viewBox="0 0 10 10" stroke="#000" stroke-width="1.8" fill="none"><path d="M2 5l2 2 4-4"/></svg></button>
+              <span class="t-num">1.</span>
+              <svg class="t-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="1.8"/></svg>
+              <span class="dot" data-clir="Loophole — arguments" aria-label="CLIR: Loophole — arguments">L</span><span class="t-title">Redo the 8 questions we missed on Monday</span>
+              <span class="t-time">11:00 am · 30m</span>
+              <button class="t-more" aria-label="Task details">⋯</button>
+              <button class="t-launch" aria-label="Start task">↗</button></div></article>
+            <article class="task"><div class="task-row">
+              <button class="cb" onclick="toggleTask(this)"><svg viewBox="0 0 10 10" stroke="#000" stroke-width="1.8" fill="none"><path d="M2 5l2 2 4-4"/></svg></button>
+              <span class="t-num">2.</span>
+              <svg class="t-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11.2 2.6l2.2 2.2-8 8-3 .8.8-3z"/></svg>
+              <span class="dot none" data-clir="No CLIR focus" aria-label="No CLIR focus"></span><span class="t-title">One sentence on why each trap answer worked</span>
+              <span class="t-time">11:30 am · 15m</span>
+              <button class="t-more" aria-label="Task details">⋯</button></div></article>
+          </div>
+        </section>
+
+        <!-- appears only when every task is checked -->
+        <div class="day-done" id="day-done" hidden>
+          <div class="day-done-top">
+            <svg width="26" height="26" viewBox="0 0 34 34">
+              <circle cx="17" cy="17" r="13.5" fill="#22C3A2" stroke="#000" stroke-width="2.5"/>
+              <path d="M11 17.5l4 4 8-8.5" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <b>That's the day.</b><span class="meta">2h 40m</span>
+          </div>
+          <p>How did translation feel today?</p>
+          <div class="feels">
+            <button class="feel" aria-pressed="false" onclick="feel(this)">It clicked</button>
+            <button class="feel" aria-pressed="false" onclick="feel(this)">Slow but solid</button>
+            <button class="feel" aria-pressed="false" onclick="feel(this)">Foggy</button>
+            <button class="feel" aria-pressed="false" onclick="feel(this)">Rushed it</button>
+            <button class="feel" aria-pressed="false" onclick="feel(this)">Fighting it</button>
+            <button class="feel" aria-pressed="false" onclick="feel(this)">Zoomies</button>
+          </div>
+          <button class="skip">Skip for today</button>
+        </div>
+
+        <div class="day-pager">
+          <button>← Tuesday, Jul 14</button>
+          <button>Thursday, Jul 16 →</button>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<section class="sheet">
+  <h2>Notes</h2>
+  <p class="sub">Rebuilt against the real design system. Hover the plan strip and the diamonds under it; check every task to see the day close appear; bookmark a workout or routine and watch the rail fill.</p>
+
+  <div class="decisions">
+    <h3>Corrected by the design system file</h3>
+    <ul>
+      <li><strong>Inter</strong>, not the grotesque I guessed at. The library has font-family tokens for Body, Display, Display (Alt) and Display (Brand), and a scale of Display 1–3 / Title 1–2 / Body 1–3 / Caption 1–2.</li>
+      <li><strong>Everything uses their Progress component.</strong> Eight steps at 12.5% each, plus Completed and Repeat. That now covers the day, the prep stages, and count-based goals — the donut is gone, since it was a shape the library doesn't have. One consequence to confirm: a 12-task day can't land on an eighth, so the meter rounds to the nearest step while the fraction stays exact. The Repeat state still needs designing into this screen.</li>
+      <li><strong>Colour belongs to prep stages.</strong> Each stage has main and accent ramps in Default / LC / HC / Overlay, documented as identity vs contrast. So CLIR is carried by letters on neutral chips, not by colour — colour is already spoken for.</li>
+      <li><strong>Open question:</strong> the library has two generations, Simple and Expressive, plus a dark mode. This is drawn Expressive, matching the current My Plan page. Confirm before building.</li>
+    </ul>
+  </div>
+
+  <div class="decisions">
+    <h3>Fixed from the heuristic pass</h3>
+    <ul>
+      <li><strong>One day control, not two.</strong> A pill reading "Wednesday, Jul 15" and a button reading "Today" said the same thing. The date pill is now the only statement of which day you are on, flanked by ‹ ›; "Back to today" appears only once you have navigated away. Page to another day to see it.</li>
+      <li><strong>The CLIR dot explains itself on hover</strong> rather than needing a legend elsewhere on the page. The trade-off is that the meaning is hover-only, so it doesn't reach touch — same unresolved issue as the plan strip. Both need one answer, not two.</li>
+      <li><strong>The ⋯ is always visible.</strong> Hover-only meant touch users had no route to reschedule or skip.</li>
+      <li><strong>Checkbox and launch arrow are separated</strong>, and the checkbox is larger. Mis-tapping "start" when you meant "done" navigates you away.</li>
+      <li><strong>Still open:</strong> the strip and mile markers remain hover-dependent, so on touch they carry no information. Needs a non-hover route — tap-to-expand, or the dates written out.</li>
+    </ul>
+  </div>
+
+  <div class="decisions">
+    <h3>Proposals, not readings of the PRD</h3>
+    <ul>
+      <li><strong>The goal ladder sits in the rail</strong>, with the Prep Map. The PRD puts it atop the day timeline, but a goal advances on performance over weeks — it is not a property of Wednesday. Left column is longitudinal, main column is today.</li>
+      <li><strong>LR and RC share one control.</strong> Both goals are always live; the switch is a viewing control, not a state. When both sit on the same rung, the switch shouldn't render at all.</li>
+      <li><strong>Goal readouts vary by measure.</strong> A time goal is lower-is-better, so a percentage bar is meaningless without a stored baseline — it shows 31:40 → 25:00. Counts get boxes. Percentages get a bar.</li>
+      <li><strong>A day close, not a task.</strong> The Tandem Plan ends every day with a reflection, which the PRD doesn't mention. It appears once the day is checked off, as pills you can pick several of, or skip.</li>
+      <li><strong>Not designed:</strong> the celebration moment (Ellen's), real copy, the ⋯ popover contents, error and locked states, the upsell behind "Include book". Redline Prep is a placeholder business name.</li>
+    </ul>
+  </div>
+</section>
+
+<script src="studysurface.js"></script>
+</body>
+</html>
