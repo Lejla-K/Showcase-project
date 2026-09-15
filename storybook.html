@@ -1,0 +1,3351 @@
+<!DOCTYPE html>
+<html lang="en" data-sb-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Peau App — Component Storybook</title>
+  <meta name="description" content="A Storybook-style browser for the Peau App design system, built from the Figma component library.">
+
+  <!--
+    Peau App — Component Storybook
+    ==============================
+    A single-file, dependency-free Storybook for the Peau App design system,
+    generated from the Figma component library:
+
+      https://www.figma.com/design/fAjGnlWWU5b4eE3OQAmBOr/Peau-App_New?node-id=60879-52981
+
+    Open this file in a browser. No build, no server, no npm.
+
+    37 stories across 25 components in 7 groups (Actions, Inputs, Data display,
+    Containment, Navigation, Feedback, Foundations). Each component has a
+    Playground story whose controls are its real Figma variant properties
+    (Type, Size, State, Configuration, Density, ...), plus "All variants"
+    stories rendering the complete matrix as laid out on the Figma canvas.
+
+    Features: searchable sidebar tree · Controls addon generated from arg types ·
+    Code addon with copy · Docs addon carrying each component's Figma
+    description, node id, deep link and Material 3 guidance link · canvas
+    background / viewport / zoom controls · dark UI theme · #/story/<id> routing.
+
+    THEMING
+    The ":root" block at the top of the stylesheet maps 1:1 onto the Figma
+    variables (Schemes/Primary -> --schemes-primary, and so on). Re-theming the
+    whole library means editing that one block.
+
+    NOTES ON FIDELITY
+    - Button, icon button, text field, checkbox, radio, switch and the token set
+      were built from design context read directly out of Figma, so their
+      padding, radii, state-layer colours and type ramps are exact.
+    - The remaining components were built from the Figma component metadata
+      (variant names and geometry) plus the same token set, following the
+      Material 3 specs each component's Figma description links to. Faithful
+      rather than pixel-verified — the Figma MCP call budget ran out partway.
+    - Icons use Material Symbols Rounded, the source the Figma icons were
+      exported from (layer names are literally
+      check_circle_24dp_FILL1_wght400_GRAD0_opsz24), rather than Figma asset
+      URLs, which expire after seven days. Every .peau-icon has an explicit box
+      so a font-load failure clips the ligature name instead of breaking layout.
+  -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Funnel+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" rel="stylesheet">
+
+<style>
+/* ===== tokens ===== */
+/* ============================================================
+   Peau App — Design tokens
+   Source: Figma "Peau App_New" › page "Components (Adjusted)"
+   https://www.figma.com/design/fAjGnlWWU5b4eE3OQAmBOr/Peau-App_New?node-id=60879-52981
+   Values pulled from Figma variables (M3 light theme, Peau scheme).
+   ============================================================ */
+
+:root {
+  /* ---- Color · schemes ---- */
+  --schemes-primary:            #fe8729;
+  --schemes-on-primary:         #2b1708;
+  --schemes-primary-container:  #fff7f1;
+  --schemes-secondary:          #2b1708;
+  --schemes-secondary-variant:  #6c4828;
+  --schemes-on-surface:         #2b1708;
+  --schemes-outline:            #c3bcb9;
+  --schemes-surface:            #ffffff;
+  --schemes-section-background: #ffffff;
+
+  /* ---- Color · primary variants ---- */
+  --primary60: #fdac6d;
+
+  /* ---- Color · state layers ---- */
+  --states-primary-8:    rgba(254, 135, 41, 0.08);
+  --states-primary-12:   rgba(254, 135, 41, 0.12);
+  --states-secondary-8:  rgba(43, 23, 8, 0.08);
+  --states-secondary-12: rgba(43, 23, 8, 0.12);
+  --states-disabled:     rgba(29, 27, 32, 0.10);
+  --states-disabled-content-opacity: 0.38;
+
+  /* ---- Shape · corner ---- */
+  --corner-none:        0px;
+  --corner-extra-small: 4px;
+  --corner-small:       8px;
+  --corner-medium:      12px;
+  --corner-large:       16px;
+  --corner-extra-large: 28px;
+  --corner-full:        1000px;
+
+  /* ---- Elevation ---- */
+  --elevation-0: none;
+  --elevation-1: 0 1px 2px rgba(43, 23, 8, 0.16), 0 1px 3px 1px rgba(43, 23, 8, 0.08);
+  --elevation-2: 0 1px 2px rgba(43, 23, 8, 0.16), 0 2px 6px 2px rgba(43, 23, 8, 0.08);
+  --elevation-3: 0 4px 8px 3px rgba(43, 23, 8, 0.08), 0 1px 3px rgba(43, 23, 8, 0.16);
+
+  /* ---- Typography · families ---- */
+  --font-display: "Funnel Display", "Trebuchet MS", "Segoe UI", sans-serif;
+  --font-body:    "Funnel Sans", "Segoe UI", system-ui, sans-serif;
+
+  /* ---- Typography · M3 roles (size / line-height / tracking) ---- */
+  --headline-large-size: 32px;  --headline-large-line: 40px;  --headline-large-track: 0px;
+  --headline-small-size: 24px;  --headline-small-line: 32px;  --headline-small-track: 0px;
+  --title-medium-size:   16px;  --title-medium-line:   24px;  --title-medium-track:   0.15px;
+  --title-small-size:    14px;  --title-small-line:    20px;  --title-small-track:    0.1px;
+  --label-large-size:    14px;  --label-large-line:    20px;  --label-large-track:    0.1px;
+  --body-large-size:     16px;  --body-large-line:     24px;  --body-large-track:     0.5px;
+  --body-medium-size:    14px;  --body-medium-line:    20px;  --body-medium-track:    0.25px;
+  --body-small-size:     12px;  --body-small-line:     16px;  --body-small-track:     0.4px;
+}
+
+
+/* ===== components ===== */
+/* ============================================================
+   Peau App — Component library
+   Every rule below is derived from the Figma component set on
+   page "Components (Adjusted)". Variant names in comments match
+   the Figma variant property names exactly.
+   ============================================================ */
+
+.peau { font-family: var(--font-body); color: var(--schemes-on-surface); }
+
+/* Material Symbols glyphs — the same source the Figma icons were
+   exported from (layer names e.g. check_circle_24dp_FILL1_wght400_GRAD0_opsz24) */
+.peau-icon {
+  font-family: "Material Symbols Rounded";
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  flex: none;
+  /* Default box. Every icon is sized explicitly so that if the icon font
+     fails to load, the ligature name is clipped to the glyph box instead
+     of overflowing and breaking the surrounding layout. */
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+}
+
+/* ============================================================
+   BUTTON  ·  Figma: Button / Button - text / Button - outline
+   Props: Type (Round|Square) × Size (XSmall…XLarge) × State × Icon
+   ============================================================ */
+
+.peau-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: none;
+  font-family: var(--font-display);
+  color: var(--schemes-on-primary);
+  cursor: pointer;
+  text-decoration: none;
+  isolation: isolate;
+  transition: border-radius 120ms ease;
+}
+.peau-btn__content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--schemes-primary);
+  border-radius: inherit;
+}
+.peau-btn__state-layer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+.peau-btn__label { white-space: nowrap; }
+
+/* --- Size: XSmall --- */
+.peau-btn--xsmall                    { border-radius: var(--corner-full); }
+.peau-btn--xsmall .peau-btn__state-layer { gap: 4px; padding: 6px 12px; }
+.peau-btn--xsmall .peau-btn__label {
+  font-size: var(--label-large-size); line-height: var(--label-large-line);
+  letter-spacing: var(--label-large-track); font-weight: 500;
+}
+.peau-btn--xsmall .peau-icon { font-size: 20px; width: 20px; height: 20px; }
+
+/* --- Size: Small --- */
+.peau-btn--small                     { border-radius: var(--corner-full); }
+.peau-btn--small .peau-btn__state-layer  { gap: 8px; padding: 10px 16px; }
+.peau-btn--small .peau-btn__label {
+  font-size: var(--label-large-size); line-height: var(--label-large-line);
+  letter-spacing: var(--label-large-track); font-weight: 500;
+}
+.peau-btn--small .peau-icon { font-size: 20px; width: 20px; height: 20px; }
+
+/* --- Size: Medium --- */
+.peau-btn--medium                    { border-radius: var(--corner-full); }
+.peau-btn--medium .peau-btn__state-layer { gap: 8px; padding: 16px 24px; }
+.peau-btn--medium .peau-btn__label {
+  font-size: var(--title-medium-size); line-height: var(--title-medium-line);
+  letter-spacing: var(--title-medium-track); font-weight: 400;
+}
+.peau-btn--medium .peau-icon { font-size: 24px; width: 24px; height: 24px; }
+
+/* --- Size: Large --- */
+.peau-btn--large                     { border-radius: var(--corner-full); }
+.peau-btn--large .peau-btn__state-layer  { gap: 12px; padding: 32px 48px; }
+.peau-btn--large .peau-btn__label {
+  font-size: var(--headline-small-size); line-height: var(--headline-small-line);
+  letter-spacing: var(--headline-small-track); font-weight: 400;
+}
+.peau-btn--large .peau-icon { font-size: 32px; width: 32px; height: 32px; }
+
+/* --- Size: XLarge --- */
+.peau-btn--xlarge                    { border-radius: var(--corner-full); }
+.peau-btn--xlarge .peau-btn__state-layer { gap: 16px; padding: 48px 64px; }
+.peau-btn--xlarge .peau-btn__label {
+  font-size: var(--headline-large-size); line-height: var(--headline-large-line);
+  letter-spacing: var(--headline-large-track); font-weight: 400;
+}
+.peau-btn--xlarge .peau-icon { font-size: 40px; width: 40px; height: 40px; }
+
+/* --- Type: Square (overrides the Round radii above) --- */
+.peau-btn--square.peau-btn--xsmall,
+.peau-btn--square.peau-btn--small  { border-radius: var(--corner-medium); }
+.peau-btn--square.peau-btn--medium { border-radius: var(--corner-large); }
+.peau-btn--square.peau-btn--large,
+.peau-btn--square.peau-btn--xlarge { border-radius: var(--corner-extra-large); }
+
+/* --- State: Hovered / Focused / Pressed --- */
+.peau-btn--hovered .peau-btn__state-layer { background: var(--states-secondary-8); }
+.peau-btn--focused .peau-btn__state-layer { background: var(--states-secondary-12); }
+.peau-btn--pressed .peau-btn__state-layer { background: var(--states-secondary-8); }
+
+/* Pressed squashes the corner radius (Figma: pressed radii) */
+.peau-btn--pressed.peau-btn--xsmall,
+.peau-btn--pressed.peau-btn--small  { border-radius: var(--corner-small); }
+.peau-btn--pressed.peau-btn--medium { border-radius: var(--corner-medium); }
+.peau-btn--pressed.peau-btn--large,
+.peau-btn--pressed.peau-btn--xlarge { border-radius: var(--corner-large); }
+
+/* Focus indicator — 3px, inset -2px, colour Schemes/Secondary */
+.peau-btn--focused::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border: 3px solid var(--schemes-secondary);
+  border-radius: calc(var(--corner-full));
+  pointer-events: none;
+}
+.peau-btn--square.peau-btn--focused::after { border-radius: 18px; }
+
+/* --- State: Disabled --- */
+.peau-btn--disabled { cursor: default; pointer-events: none; }
+.peau-btn--disabled .peau-btn__content     { background: var(--states-disabled); }
+.peau-btn--disabled .peau-btn__state-layer { opacity: var(--states-disabled-content-opacity); }
+.peau-btn--disabled .peau-btn__label       { color: var(--schemes-on-surface); }
+
+/* --- Variant: text (Figma "Button - text") --- */
+.peau-btn--text .peau-btn__content  { background: transparent; }
+.peau-btn--text .peau-btn__label,
+.peau-btn--text .peau-icon          { color: var(--schemes-primary); }
+.peau-btn--text.peau-btn--hovered .peau-btn__state-layer { background: var(--states-primary-8); }
+.peau-btn--text.peau-btn--focused .peau-btn__state-layer { background: var(--states-primary-12); }
+.peau-btn--text.peau-btn--pressed .peau-btn__state-layer { background: var(--states-primary-12); }
+.peau-btn--text.peau-btn--disabled .peau-btn__content { background: transparent; }
+.peau-btn--text.peau-btn--disabled .peau-btn__label,
+.peau-btn--text.peau-btn--disabled .peau-icon { color: var(--schemes-on-surface); }
+
+/* --- Variant: outline (Figma "Button - outline") --- */
+.peau-btn--outline .peau-btn__content {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--schemes-outline);
+}
+.peau-btn--outline .peau-btn__label,
+.peau-btn--outline .peau-icon { color: var(--schemes-primary); }
+.peau-btn--outline.peau-btn--hovered .peau-btn__state-layer { background: var(--states-primary-8); }
+.peau-btn--outline.peau-btn--focused .peau-btn__state-layer { background: var(--states-primary-12); }
+.peau-btn--outline.peau-btn--pressed .peau-btn__state-layer { background: var(--states-primary-12); }
+.peau-btn--outline.peau-btn--focused .peau-btn__content {
+  box-shadow: inset 0 0 0 1px var(--schemes-primary);
+}
+.peau-btn--outline.peau-btn--disabled .peau-btn__content {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--schemes-outline);
+}
+.peau-btn--outline.peau-btn--disabled .peau-btn__label,
+.peau-btn--outline.peau-btn--disabled .peau-icon { color: var(--schemes-on-surface); }
+
+/* ============================================================
+   ICON BUTTON  ·  Figma: Icon button / -tonal / -outline / -standard
+   ============================================================ */
+
+.peau-icon-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  border-radius: var(--corner-full);
+  color: var(--schemes-on-primary);
+}
+.peau-icon-btn__content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: inherit;
+  background: var(--schemes-primary);
+  overflow: hidden;
+}
+.peau-icon-btn__state-layer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+.peau-icon-btn .peau-icon { font-size: 24px; width: 24px; height: 24px; }
+
+.peau-icon-btn--square            { border-radius: var(--corner-medium); }
+.peau-icon-btn--square .peau-icon-btn__content { border-radius: var(--corner-medium); }
+
+.peau-icon-btn--tonal .peau-icon-btn__content    { background: var(--primary60); }
+.peau-icon-btn--outline .peau-icon-btn__content  {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--schemes-outline);
+  color: var(--schemes-on-surface);
+}
+.peau-icon-btn--standard .peau-icon-btn__content { background: transparent; color: var(--schemes-on-surface); }
+
+.peau-icon-btn--hovered .peau-icon-btn__state-layer { background: var(--states-secondary-8); }
+.peau-icon-btn--focused .peau-icon-btn__state-layer { background: var(--states-secondary-12); }
+.peau-icon-btn--pressed .peau-icon-btn__state-layer { background: var(--states-secondary-8); }
+.peau-icon-btn--focused::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 3px solid var(--schemes-secondary);
+  border-radius: inherit;
+  pointer-events: none;
+}
+.peau-icon-btn--disabled { pointer-events: none; }
+.peau-icon-btn--disabled .peau-icon-btn__content     { background: var(--states-disabled); box-shadow: none; }
+.peau-icon-btn--disabled .peau-icon-btn__state-layer { opacity: var(--states-disabled-content-opacity); }
+
+/* --- Size variants (Figma: XS 32 / S 40 / M 56 / L 96 / XL 136) --- */
+.peau-icon-btn--xs { width: 40px; height: 40px; }
+.peau-icon-btn--xs .peau-icon-btn__content { width: 32px; height: 32px; }
+.peau-icon-btn--xs .peau-icon { font-size: 20px; width: 20px; height: 20px; }
+.peau-icon-btn--m  { width: 64px; height: 64px; }
+.peau-icon-btn--m  .peau-icon-btn__content { width: 56px; height: 56px; }
+.peau-icon-btn--m  .peau-icon { font-size: 24px; width: 24px; height: 24px; }
+.peau-icon-btn--l  { width: 104px; height: 104px; }
+.peau-icon-btn--l  .peau-icon-btn__content { width: 96px; height: 96px; }
+.peau-icon-btn--l  .peau-icon { font-size: 32px; width: 32px; height: 32px; }
+.peau-icon-btn--xl { width: 144px; height: 144px; }
+.peau-icon-btn--xl .peau-icon-btn__content { width: 136px; height: 136px; }
+.peau-icon-btn--xl .peau-icon { font-size: 40px; width: 40px; height: 40px; }
+
+/* ============================================================
+   TEXT FIELD  ·  Figma: Text field
+   Style=Outlined × State × Text configurations × Leading/Trailing icon
+   ============================================================ */
+
+.peau-textfield {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 210px;
+  height: 56px;
+  border-radius: var(--corner-medium);
+}
+.peau-textfield__box {
+  display: flex;
+  flex: 1 0 0;
+  min-height: 0;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--schemes-outline);
+  border-radius: var(--corner-medium);
+  background: transparent;
+}
+.peau-textfield__state-layer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1 0 0;
+  min-height: 0;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px 16px;
+  border-radius: var(--corner-medium);
+}
+.peau-textfield__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1 0 0;
+  min-width: 0;
+  height: 48px;
+  padding: 4px 0;
+}
+.peau-textfield__text {
+  font-family: var(--font-body);
+  font-size: var(--body-large-size);
+  line-height: var(--body-large-line);
+  letter-spacing: var(--body-large-track);
+  color: var(--schemes-secondary-variant);
+  margin: 0;
+}
+.peau-textfield__text--input { color: var(--schemes-on-surface); }
+.peau-textfield__supporting {
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  right: 0;
+  height: 20px;
+  padding: 4px 16px;
+  box-sizing: border-box;
+  font-family: var(--font-body);
+  font-size: var(--body-small-size);
+  line-height: var(--body-small-line);
+  letter-spacing: var(--body-small-track);
+  color: var(--schemes-secondary-variant);
+}
+.peau-textfield .peau-icon { font-size: 24px; width: 24px; height: 24px; color: var(--schemes-secondary-variant); }
+
+/* Caret shown in the Focused variant */
+.peau-textfield__caret {
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background: var(--schemes-primary);
+  animation: peau-blink 1s step-end infinite;
+}
+@keyframes peau-blink { 50% { opacity: 0; } }
+
+/* --- States --- */
+.peau-textfield--hovered  .peau-textfield__box { border-color: var(--schemes-on-surface); }
+.peau-textfield--focused  .peau-textfield__box { border: 3px solid var(--schemes-primary); }
+.peau-textfield--error    .peau-textfield__box { border: 2px solid #b3261e; }
+.peau-textfield--error    .peau-textfield__supporting,
+.peau-textfield--error    .peau-textfield__text,
+.peau-textfield--error    .peau-icon { color: #b3261e; }
+.peau-textfield--disabled { opacity: var(--states-disabled-content-opacity); }
+.peau-textfield--disabled .peau-textfield__box { border-color: var(--schemes-on-surface); }
+
+/* ============================================================
+   CHECKBOX  ·  Figma: Checkboxes
+   Type (Selected|Unselected|Indeterminate|Error *) × State
+   ============================================================ */
+
+.peau-checkbox {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 4px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.peau-checkbox__state-layer {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px;
+  border-radius: var(--corner-full);
+}
+.peau-checkbox__box {
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
+  box-sizing: border-box;
+  background: var(--primary60);
+}
+.peau-checkbox__mark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  color: var(--schemes-on-primary);
+}
+/* Type=Unselected — 2px outline box, no fill, no glyph */
+.peau-checkbox--unselected .peau-checkbox__box {
+  background: transparent;
+  border: 2px solid var(--schemes-secondary-variant);
+}
+.peau-checkbox--unselected .peau-checkbox__mark { display: none; }
+/* Type=Error * */
+.peau-checkbox--error .peau-checkbox__box  { background: #b3261e; }
+.peau-checkbox--error.peau-checkbox--unselected .peau-checkbox__box {
+  background: transparent; border-color: #b3261e;
+}
+/* States */
+.peau-checkbox--hovered .peau-checkbox__state-layer { background: var(--states-secondary-8); }
+.peau-checkbox--focused .peau-checkbox__state-layer { background: var(--states-secondary-12); }
+.peau-checkbox--pressed .peau-checkbox__state-layer { background: var(--states-primary-12); }
+.peau-checkbox--disabled { pointer-events: none; opacity: var(--states-disabled-content-opacity); }
+
+/* ============================================================
+   RADIO BUTTON  ·  Figma: Radio buttons — Selected × State
+   ============================================================ */
+
+.peau-radio {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+}
+.peau-radio__container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--corner-full);
+}
+.peau-radio__state-layer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: var(--corner-full);
+}
+.peau-radio__icon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--corner-full);
+  box-sizing: border-box;
+  border: 2px solid var(--schemes-secondary-variant);
+}
+.peau-radio--selected .peau-radio__icon { border-color: var(--schemes-primary); }
+.peau-radio--selected .peau-radio__icon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: var(--corner-full);
+  background: var(--schemes-primary);
+}
+/* State layers — primary tint when selected, secondary when not */
+.peau-radio--selected.peau-radio--hovered .peau-radio__state-layer,
+.peau-radio--selected.peau-radio--focused .peau-radio__state-layer { background: var(--states-primary-8); }
+.peau-radio--selected.peau-radio--pressed .peau-radio__state-layer { background: var(--states-primary-12); }
+.peau-radio--hovered .peau-radio__state-layer,
+.peau-radio--pressed .peau-radio__state-layer { background: var(--states-secondary-8); }
+.peau-radio--focused .peau-radio__state-layer { background: var(--states-secondary-12); }
+.peau-radio--focused::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 3px solid var(--schemes-secondary);
+  border-radius: var(--corner-full);
+  pointer-events: none;
+}
+.peau-radio--disabled { pointer-events: none; opacity: var(--states-disabled-content-opacity); }
+
+/* ============================================================
+   SWITCH  ·  Figma: Switch — Selected × State × Icon
+   ============================================================ */
+
+.peau-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 52px;
+  height: 32px;
+  padding: 2px 4px;
+  box-sizing: border-box;
+  justify-content: flex-end;
+  border-radius: var(--corner-full);
+  background: var(--primary60);
+  cursor: pointer;
+}
+.peau-switch__handle { position: relative; flex: 1 0 0; min-width: 0; height: 100%; }
+.peau-switch__target {
+  position: absolute;
+  top: 50%;
+  right: -12px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+}
+.peau-switch__state-layer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: var(--corner-full);
+}
+.peau-switch__shape {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--schemes-on-primary);
+  color: var(--primary60);
+}
+.peau-switch__shape .peau-icon { font-size: 16px; width: 16px; height: 16px; }
+
+/* Selected=False — outlined track, smaller handle pinned left */
+.peau-switch--off {
+  justify-content: flex-start;
+  padding: 2px 8px;
+  background: var(--schemes-primary-container);
+  border: 2px solid var(--schemes-outline);
+}
+.peau-switch--off .peau-switch__target      { right: auto; left: -16px; }
+.peau-switch--off .peau-switch__state-layer { padding: 12px; }
+.peau-switch--off .peau-switch__shape       { padding: 7px; background: var(--schemes-secondary-variant); }
+
+.peau-switch--hovered .peau-switch__state-layer { background: var(--states-secondary-8); }
+.peau-switch--focused .peau-switch__state-layer { background: var(--states-secondary-12); }
+.peau-switch--pressed .peau-switch__state-layer { background: var(--states-primary-12); }
+.peau-switch--disabled { pointer-events: none; opacity: var(--states-disabled-content-opacity); }
+
+/* ============================================================
+   BADGE  ·  Figma: Badges — Size (Small 6px | Large 16px)
+   ============================================================ */
+
+.peau-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--schemes-primary);
+  border-radius: var(--corner-full);
+  color: var(--schemes-on-primary);
+  font-family: var(--font-display);
+}
+.peau-badge--small { width: 6px; height: 6px; }
+.peau-badge--large {
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  box-sizing: border-box;
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================
+   DIVIDER  ·  Figma: Dividers
+   Horizontal/Full-width | Inset | Middle-inset | with subhead, Vertical/*
+   ============================================================ */
+
+.peau-divider {
+  border: 0;
+  background: var(--schemes-outline);
+  margin: 0;
+}
+.peau-divider--horizontal            { width: 320px; height: 1px; }
+.peau-divider--inset                 { margin-left: 16px; width: 304px; }
+.peau-divider--middle-inset          { margin: 0 16px; width: 288px; }
+.peau-divider--vertical              { width: 1px; height: 120px; }
+.peau-divider-subhead {
+  width: 320px;
+  font-family: var(--font-display);
+  font-size: var(--title-small-size);
+  line-height: var(--title-small-line);
+  letter-spacing: var(--title-small-track);
+  font-weight: 500;
+  color: var(--schemes-secondary-variant);
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--schemes-outline);
+}
+
+/* ============================================================
+   CHIP  ·  Figma: Custom components › Non interactive Chip
+   ============================================================ */
+
+.peau-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  border-radius: var(--corner-small);
+  background: var(--schemes-primary-container);
+  box-shadow: inset 0 0 0 1px var(--schemes-outline);
+  font-family: var(--font-display);
+  font-size: var(--label-large-size);
+  line-height: var(--label-large-line);
+  letter-spacing: var(--label-large-track);
+  color: var(--schemes-on-surface);
+}
+.peau-chip .peau-icon { font-size: 18px; width: 18px; height: 18px; }
+.peau-chip--selected {
+  background: var(--primary60);
+  box-shadow: none;
+}
+
+/* ============================================================
+   CARD  ·  Figma: Cards — Stacked card / Horizontal card
+   Style (Elevated|Style5) × Layout (Media & text|Slot)
+   ============================================================ */
+
+.peau-card {
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  box-sizing: border-box;
+  border-radius: var(--corner-medium);
+  background: var(--schemes-surface);
+  overflow: hidden;
+}
+.peau-card--elevated { box-shadow: var(--elevation-1); }
+.peau-card--outlined { box-shadow: inset 0 0 0 1px var(--schemes-outline); }
+.peau-card--filled   { background: var(--schemes-primary-container); }
+.peau-card--horizontal { flex-direction: row; align-items: center; height: 80px; gap: 16px; }
+.peau-card__media {
+  flex: none;
+  width: 80px;
+  height: 80px;
+  background: var(--primary60);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--schemes-on-primary);
+}
+.peau-card__media .peau-icon { font-size: 32px; width: 32px; height: 32px; }
+.peau-card--stacked .peau-card__media { width: 100%; height: 160px; }
+.peau-card__body { display: flex; flex-direction: column; gap: 4px; padding: 12px 16px; min-width: 0; }
+.peau-card--horizontal .peau-card__body { padding: 12px 16px 12px 0; }
+.peau-card__title {
+  font-family: var(--font-display);
+  font-size: var(--title-medium-size);
+  line-height: var(--title-medium-line);
+  letter-spacing: var(--title-medium-track);
+  color: var(--schemes-on-surface);
+}
+.peau-card__text {
+  font-family: var(--font-body);
+  font-size: var(--body-medium-size);
+  line-height: var(--body-medium-line);
+  letter-spacing: var(--body-medium-track);
+  color: var(--schemes-secondary-variant);
+}
+.peau-card__slot {
+  height: 80px;
+  border: 1px dashed var(--schemes-outline);
+  border-radius: var(--corner-small);
+  margin: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--schemes-secondary-variant);
+  font-size: var(--body-small-size);
+  letter-spacing: var(--body-small-track);
+}
+
+/* ============================================================
+   APP BAR  ·  Figma: App bars
+   Configuration (Small|Small-centered|Small-image|Search|Medium|Large)
+   × Elevation (Flat|On-scroll)
+   ============================================================ */
+
+.peau-appbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 412px;
+  height: 64px;
+  padding: 0 4px;
+  box-sizing: border-box;
+  background: var(--schemes-surface);
+  color: var(--schemes-on-surface);
+}
+.peau-appbar--on-scroll { box-shadow: var(--elevation-2); }
+.peau-appbar__headline {
+  flex: 1 0 0;
+  min-width: 0;
+  padding: 0 12px;
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 28px;
+  color: var(--schemes-on-surface);
+}
+.peau-appbar--centered .peau-appbar__headline { text-align: center; }
+.peau-appbar--medium { height: 112px; align-items: flex-end; padding-bottom: 20px; flex-wrap: wrap; }
+.peau-appbar--medium .peau-appbar__headline { flex-basis: 100%; font-size: 24px; line-height: 32px; }
+.peau-appbar--large  { height: 120px; align-items: flex-end; padding-bottom: 24px; flex-wrap: wrap; }
+.peau-appbar--large  .peau-appbar__headline { flex-basis: 100%; font-size: 28px; line-height: 36px; }
+.peau-appbar__leading, .peau-appbar__trailing { display: flex; align-items: center; gap: 4px; }
+.peau-appbar__avatar {
+  width: 32px; height: 32px; border-radius: var(--corner-full);
+  background: var(--primary60); flex: none;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--schemes-on-primary);
+}
+.peau-appbar__avatar .peau-icon { font-size: 20px; width: 20px; height: 20px; }
+
+/* Search app bar — Figma "Building Blocks/*/Search bar" */
+.peau-searchbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 292px;
+  height: 56px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  border-radius: var(--corner-full);
+  background: var(--schemes-primary-container);
+  color: var(--schemes-secondary-variant);
+  font-family: var(--font-body);
+  font-size: var(--body-large-size);
+  letter-spacing: var(--body-large-track);
+}
+.peau-searchbar--centered { justify-content: center; }
+.peau-searchbar .peau-icon { font-size: 24px; width: 24px; height: 24px; }
+.peau-searchbar__label { flex: 1 0 0; min-width: 0; }
+.peau-searchbar--centered .peau-searchbar__label { flex: none; }
+
+/* ============================================================
+   TABS  ·  Figma: Tabs
+   Type (Fixed|Scrollable) × Style (Primary|Secondary)
+   × Configuration (Label only|Label & icon|Icon only)
+   ============================================================ */
+
+.peau-tabs {
+  display: flex;
+  width: 360px;
+  height: 48px;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--schemes-outline);
+  background: var(--schemes-surface);
+}
+.peau-tabs--with-icon { height: 64px; }
+.peau-tabs--scrollable { justify-content: flex-start; overflow-x: auto; }
+.peau-tab {
+  position: relative;
+  display: flex;
+  flex: 1 0 0;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 0 16px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: var(--title-small-size);
+  line-height: var(--title-small-line);
+  letter-spacing: var(--title-small-track);
+  font-weight: 500;
+  color: var(--schemes-secondary-variant);
+  white-space: nowrap;
+}
+.peau-tabs--scrollable .peau-tab { flex: none; }
+.peau-tab .peau-icon { font-size: 24px; width: 24px; height: 24px; }
+.peau-tab--active { color: var(--schemes-primary); }
+/* Style=Primary — indicator hugs the label; Secondary — spans the tab */
+.peau-tab--active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  height: 3px;
+  background: var(--schemes-primary);
+  border-radius: 3px 3px 0 0;
+}
+.peau-tabs--primary   .peau-tab--active::after { left: 50%; transform: translateX(-50%); width: 56px; }
+.peau-tabs--secondary .peau-tab--active::after { left: 0; right: 0; width: auto; }
+.peau-tabs--secondary .peau-tab--active { color: var(--schemes-on-surface); }
+
+/* ============================================================
+   SNACKBAR  ·  Figma: Snackbars
+   Configuration (Text only|Text & action|Text & longer action)
+   × # of lines (One|Two) × Show close affordance
+   ============================================================ */
+
+.peau-snackbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 344px;
+  min-height: 48px;
+  padding: 4px 8px 4px 16px;
+  box-sizing: border-box;
+  border-radius: var(--corner-extra-small);
+  background: var(--schemes-on-surface);
+  color: var(--schemes-primary-container);
+  box-shadow: var(--elevation-3);
+}
+.peau-snackbar--two-lines { align-items: flex-start; min-height: 68px; padding-top: 12px; padding-bottom: 12px; }
+.peau-snackbar--stacked   { flex-direction: column; align-items: stretch; min-height: 112px; }
+.peau-snackbar__text {
+  flex: 1 0 0;
+  min-width: 0;
+  font-family: var(--font-body);
+  font-size: var(--body-medium-size);
+  line-height: var(--body-medium-line);
+  letter-spacing: var(--body-medium-track);
+  padding: 6px 0;
+}
+.peau-snackbar__actions { display: flex; align-items: center; gap: 4px; flex: none; }
+.peau-snackbar--stacked .peau-snackbar__actions { justify-content: flex-end; }
+.peau-snackbar__action {
+  border: 0;
+  background: none;
+  cursor: pointer;
+  padding: 10px 12px;
+  border-radius: var(--corner-full);
+  font-family: var(--font-display);
+  font-size: var(--label-large-size);
+  line-height: var(--label-large-line);
+  letter-spacing: var(--label-large-track);
+  font-weight: 500;
+  color: var(--primary60);
+}
+.peau-snackbar__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  border-radius: var(--corner-full);
+  color: var(--schemes-primary-container);
+}
+.peau-snackbar__close .peau-icon { font-size: 20px; width: 20px; height: 20px; }
+
+/* ============================================================
+   DIALOG  ·  Figma: Dialogs — Basic dialog (Icon=True|False)
+   ============================================================ */
+
+.peau-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 312px;
+  padding: 24px;
+  box-sizing: border-box;
+  border-radius: var(--corner-extra-large);
+  background: var(--schemes-surface);
+  box-shadow: var(--elevation-3);
+}
+.peau-dialog__icon { align-self: center; color: var(--schemes-primary); }
+.peau-dialog__icon .peau-icon { font-size: 24px; width: 24px; height: 24px; }
+.peau-dialog__headline {
+  font-family: var(--font-display);
+  font-size: var(--headline-small-size);
+  line-height: var(--headline-small-line);
+  color: var(--schemes-on-surface);
+}
+.peau-dialog--centered .peau-dialog__headline { text-align: center; }
+.peau-dialog__body {
+  font-family: var(--font-body);
+  font-size: var(--body-medium-size);
+  line-height: var(--body-medium-line);
+  letter-spacing: var(--body-medium-track);
+  color: var(--schemes-secondary-variant);
+}
+.peau-dialog__actions { display: flex; justify-content: flex-end; gap: 8px; }
+.peau-dialog__list { display: flex; flex-direction: column; margin: 0 -24px; }
+
+/* ============================================================
+   LIST  ·  Figma: Lists — List / List: -2 Density / List: -4 Density
+   ============================================================ */
+
+.peau-list {
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  background: var(--schemes-surface);
+}
+.peau-list-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 72px;
+  padding: 8px 16px;
+  box-sizing: border-box;
+  background: var(--schemes-surface);
+}
+.peau-list--density--2 .peau-list-item { min-height: 64px; }
+.peau-list--density--4 .peau-list-item { min-height: 56px; }
+.peau-list-item__leading {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--corner-full);
+  background: var(--primary60);
+  color: var(--schemes-on-primary);
+}
+.peau-list-item__leading .peau-icon { font-size: 24px; width: 24px; height: 24px; }
+.peau-list-item__content { display: flex; flex-direction: column; flex: 1 0 0; min-width: 0; }
+.peau-list-item__headline {
+  font-family: var(--font-body);
+  font-size: var(--body-large-size);
+  line-height: var(--body-large-line);
+  letter-spacing: var(--body-large-track);
+  color: var(--schemes-on-surface);
+}
+.peau-list-item__supporting {
+  font-family: var(--font-body);
+  font-size: var(--body-medium-size);
+  line-height: var(--body-medium-line);
+  letter-spacing: var(--body-medium-track);
+  color: var(--schemes-secondary-variant);
+}
+.peau-list-item__trailing {
+  flex: none;
+  color: var(--schemes-secondary-variant);
+  font-family: var(--font-body);
+  font-size: var(--body-small-size);
+  letter-spacing: var(--body-small-track);
+}
+.peau-list-item__trailing .peau-icon { font-size: 24px; width: 24px; height: 24px; }
+
+/* ============================================================
+   MENU  ·  Figma: Menus — Density (0 | -2 | -4)
+   ============================================================ */
+
+.peau-menu {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  padding: 8px 0;
+  box-sizing: border-box;
+  border-radius: var(--corner-small);
+  background: var(--schemes-surface);
+  box-shadow: var(--elevation-2);
+}
+.peau-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 48px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: var(--label-large-size);
+  line-height: var(--label-large-line);
+  letter-spacing: var(--label-large-track);
+  color: var(--schemes-on-surface);
+}
+.peau-menu--density--2 .peau-menu-item { height: 40px; }
+.peau-menu--density--4 .peau-menu-item { height: 32px; }
+.peau-menu-item:hover { background: var(--states-secondary-8); }
+.peau-menu-item .peau-icon { font-size: 24px; width: 24px; height: 24px; color: var(--schemes-secondary-variant); }
+.peau-menu-item__label { flex: 1 0 0; min-width: 0; }
+.peau-menu-item--disabled { opacity: var(--states-disabled-content-opacity); pointer-events: none; }
+
+/* ============================================================
+   TOOLTIP  ·  Figma: Tooltips — Plain (Single|Multi line) + Rich
+   ============================================================ */
+
+.peau-tooltip {
+  display: inline-flex;
+  align-items: center;
+  max-width: 200px;
+  min-height: 24px;
+  padding: 4px 8px;
+  box-sizing: border-box;
+  border-radius: var(--corner-extra-small);
+  background: var(--schemes-on-surface);
+  color: var(--schemes-primary-container);
+  font-family: var(--font-display);
+  font-size: var(--body-small-size);
+  line-height: var(--body-small-line);
+  letter-spacing: var(--body-small-track);
+}
+.peau-tooltip--multi { display: block; }
+.peau-tooltip-rich {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 312px;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  border-radius: var(--corner-medium);
+  background: var(--schemes-primary-container);
+  box-shadow: var(--elevation-2);
+}
+.peau-tooltip-rich__subhead {
+  font-family: var(--font-display);
+  font-size: var(--title-small-size);
+  line-height: var(--title-small-line);
+  letter-spacing: var(--title-small-track);
+  font-weight: 500;
+  color: var(--schemes-on-surface);
+}
+.peau-tooltip-rich__body {
+  font-family: var(--font-body);
+  font-size: var(--body-medium-size);
+  line-height: var(--body-medium-line);
+  letter-spacing: var(--body-medium-track);
+  color: var(--schemes-secondary-variant);
+}
+.peau-tooltip-rich__actions { display: flex; gap: 8px; padding-top: 4px; }
+
+/* ============================================================
+   PROGRESS INDICATORS  ·  Figma: Progress Indicators
+   Linear: Type (Flat|Wave) × Thickness (4dp|8dp) × Progress
+   Circular: same, plus indeterminate
+   ============================================================ */
+
+.peau-progress-linear {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 404px;
+  height: 12px;
+}
+.peau-progress-linear__active {
+  height: 4px;
+  border-radius: var(--corner-full);
+  background: var(--schemes-primary);
+  transition: width 200ms ease;
+}
+.peau-progress-linear__track {
+  flex: 1 0 0;
+  min-width: 0;
+  height: 4px;
+  border-radius: var(--corner-full);
+  background: var(--primary60);
+  opacity: 0.4;
+}
+.peau-progress-linear__stop {
+  flex: none;
+  width: 4px;
+  height: 4px;
+  border-radius: var(--corner-full);
+  background: var(--schemes-primary);
+}
+.peau-progress-linear--8dp .peau-progress-linear__active,
+.peau-progress-linear--8dp .peau-progress-linear__track { height: 8px; }
+.peau-progress-linear--8dp .peau-progress-linear__stop   { width: 8px; height: 8px; }
+/* Type=Wave — the active track is drawn as a repeating wave */
+.peau-progress-linear--wave .peau-progress-linear__active {
+  height: 12px;
+  border-radius: 0;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='12' viewBox='0 0 24 12'><path d='M0 6 Q3 0 6 6 T12 6 T18 6 T24 6' fill='none' stroke='black' stroke-width='4' stroke-linecap='round'/></svg>") repeat-x center / 24px 12px;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='12' viewBox='0 0 24 12'><path d='M0 6 Q3 0 6 6 T12 6 T18 6 T24 6' fill='none' stroke='black' stroke-width='4' stroke-linecap='round'/></svg>") repeat-x center / 24px 12px;
+  background: var(--schemes-primary);
+}
+.peau-progress-linear--indeterminate .peau-progress-linear__active {
+  animation: peau-linear-indeterminate 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@keyframes peau-linear-indeterminate {
+  0%   { width: 10%;  margin-left: 0;   }
+  50%  { width: 60%;  margin-left: 30%; }
+  100% { width: 10%;  margin-left: 90%; }
+}
+
+.peau-progress-circular { display: inline-flex; transform: rotate(-90deg); }
+.peau-progress-circular circle { fill: none; stroke-linecap: round; }
+.peau-progress-circular .peau-progress-circular__track  { stroke: var(--primary60); opacity: 0.4; }
+.peau-progress-circular .peau-progress-circular__active { stroke: var(--schemes-primary); transition: stroke-dashoffset 200ms ease; }
+.peau-progress-circular--indeterminate { animation: peau-spin 1.4s linear infinite; }
+@keyframes peau-spin { to { transform: rotate(270deg); } }
+
+/* ============================================================
+   LOADING INDICATOR  ·  Figma: Loading indicators
+   Steps (1…7) × Show container
+   ============================================================ */
+
+.peau-loading {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+}
+.peau-loading--container { background: var(--schemes-primary-container); border-radius: var(--corner-full); }
+.peau-loading__shape {
+  width: 38px;
+  height: 38px;
+  background: var(--schemes-primary);
+  animation: peau-loading-morph 3s ease-in-out infinite;
+}
+@keyframes peau-loading-morph {
+  0%,  100% { border-radius: 42% 58% 60% 40% / 45% 45% 55% 55%; transform: rotate(0deg); }
+  25%       { border-radius: 60% 40% 35% 65% / 55% 45% 55% 45%; transform: rotate(90deg); }
+  50%       { border-radius: 35% 65% 55% 45% / 60% 40% 60% 40%; transform: rotate(180deg); }
+  75%       { border-radius: 55% 45% 40% 60% / 40% 60% 40% 60%; transform: rotate(270deg); }
+}
+
+/* ============================================================
+   SLIDER  ·  Figma: Sliders — Standard / Centered / Range
+   Building blocks: Handle 4×44, Track stop 4×4, tracks 16px tall
+   ============================================================ */
+
+.peau-slider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 354px;
+  height: 44px;
+}
+.peau-slider__track {
+  position: relative;
+  flex: 1 0 0;
+  min-width: 0;
+  height: 16px;
+  border-radius: var(--corner-full);
+  background: var(--schemes-primary-container);
+  box-shadow: inset 0 0 0 1px var(--schemes-outline);
+  overflow: hidden;
+}
+.peau-slider__active {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: var(--schemes-primary);
+  border-radius: var(--corner-full);
+}
+.peau-slider__stops {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+}
+.peau-slider__stop {
+  width: 4px;
+  height: 4px;
+  border-radius: var(--corner-full);
+  background: var(--schemes-secondary-variant);
+  opacity: 0.5;
+}
+.peau-slider__handle {
+  position: absolute;
+  top: 0;
+  width: 4px;
+  height: 44px;
+  border-radius: var(--corner-full);
+  background: var(--schemes-on-surface);
+  transform: translateX(-50%);
+}
+.peau-slider__value {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  height: 44px;
+  padding: 0 8px;
+  box-sizing: border-box;
+  border-radius: var(--corner-full);
+  background: var(--schemes-primary);
+  color: var(--schemes-on-primary);
+  font-family: var(--font-display);
+  font-size: var(--title-medium-size);
+  letter-spacing: var(--title-medium-track);
+}
+
+/* ============================================================
+   SHEETS  ·  Figma: Bottom sheets / Side sheets
+   ============================================================ */
+
+.peau-sheet {
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  background: var(--schemes-surface);
+  box-shadow: var(--elevation-2);
+}
+.peau-sheet--bottom { border-radius: var(--corner-extra-large) var(--corner-extra-large) 0 0; padding-top: 16px; }
+.peau-sheet--side   { border-radius: var(--corner-large) 0 0 var(--corner-large); width: 320px; height: 420px; }
+.peau-sheet__drag-handle {
+  align-self: center;
+  width: 32px;
+  height: 4px;
+  border-radius: var(--corner-full);
+  background: var(--schemes-outline);
+  margin-bottom: 16px;
+}
+.peau-sheet__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px 16px;
+  font-family: var(--font-display);
+  font-size: var(--title-medium-size);
+  line-height: var(--title-medium-line);
+  letter-spacing: var(--title-medium-track);
+  color: var(--schemes-on-surface);
+}
+.peau-sheet__header-title { flex: 1 0 0; min-width: 0; }
+.peau-sheet__body { padding: 0 0 16px; }
+
+
+/* ===== shell ===== */
+/* ============================================================
+   Storybook-style shell for the Peau App component library
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: var(--font-body);
+  background: var(--sb-app-bg);
+  color: var(--sb-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+:root {
+  --sb-app-bg:      #f6f9fc;
+  --sb-surface:     #ffffff;
+  --sb-border:      #e3e8ee;
+  --sb-text:        #2e3438;
+  --sb-text-muted:  #73828c;
+  --sb-accent:      #fe8729;
+  --sb-accent-soft: #fff3e8;
+  --sb-code-bg:     #1f2023;
+  --sb-code-text:   #e9edf2;
+  --sb-sidebar-w:   250px;
+  --sb-panel-h:     290px;
+}
+
+[data-sb-theme="dark"] {
+  --sb-app-bg:      #16181c;
+  --sb-surface:     #1f2226;
+  --sb-border:      #31353c;
+  --sb-text:        #e7ebf0;
+  --sb-text-muted:  #98a2ad;
+  --sb-accent:      #fe8729;
+  --sb-accent-soft: #35261a;
+  --sb-code-bg:     #101214;
+  --sb-code-text:   #e9edf2;
+}
+
+/* ---------- Layout ---------- */
+
+.sb {
+  display: grid;
+  grid-template-columns: var(--sb-sidebar-w) 1fr;
+  grid-template-rows: 100%;
+  height: 100%;
+}
+
+/* ---------- Sidebar ---------- */
+
+.sb-sidebar {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--sb-surface);
+  border-right: 1px solid var(--sb-border);
+}
+
+.sb-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  border-bottom: 1px solid var(--sb-border);
+}
+.sb-brand__mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border-radius: 9px;
+  background: var(--sb-accent);
+  color: #2b1708;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+}
+.sb-brand__name {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.sb-brand__sub { font-size: 11px; color: var(--sb-text-muted); }
+
+.sb-search { padding: 12px 12px 8px; }
+.sb-search input {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--sb-border);
+  border-radius: 6px;
+  background: var(--sb-app-bg);
+  color: var(--sb-text);
+  font: inherit;
+  font-size: 13px;
+}
+.sb-search input:focus { outline: 2px solid var(--sb-accent); outline-offset: -1px; }
+
+.sb-tree { flex: 1; min-height: 0; overflow-y: auto; padding: 0 8px 24px; }
+
+.sb-tree__group { border: 0; }
+.sb-tree__group-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 7px 8px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--sb-text);
+  text-align: left;
+  border-radius: 5px;
+}
+.sb-tree__group-btn:hover { background: var(--sb-app-bg); }
+.sb-tree__caret { transition: transform 150ms ease; flex: none; color: var(--sb-text-muted); }
+.sb-tree__group[aria-expanded="true"] .sb-tree__caret { transform: rotate(90deg); }
+.sb-tree__stories { display: none; padding-left: 8px; }
+.sb-tree__group[aria-expanded="true"] .sb-tree__stories { display: block; }
+
+.sb-tree__story {
+  display: block;
+  width: 100%;
+  padding: 6px 8px 6px 20px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  color: var(--sb-text-muted);
+  text-align: left;
+  border-radius: 5px;
+}
+.sb-tree__story:hover { background: var(--sb-app-bg); color: var(--sb-text); }
+.sb-tree__story[aria-current="true"] {
+  background: var(--sb-accent);
+  color: #2b1708;
+  font-weight: 600;
+}
+
+/* ---------- Main ---------- */
+
+.sb-main {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+.sb-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--sb-surface);
+  border-bottom: 1px solid var(--sb-border);
+  flex-wrap: wrap;
+}
+.sb-toolbar__title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  margin-right: auto;
+}
+.sb-toolbar__title span { color: var(--sb-text-muted); font-weight: 400; }
+
+.sb-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 9px;
+  border: 1px solid var(--sb-border);
+  border-radius: 6px;
+  background: var(--sb-surface);
+  color: var(--sb-text);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.sb-tool:hover { border-color: var(--sb-accent); }
+.sb-tool[aria-pressed="true"] { background: var(--sb-accent-soft); border-color: var(--sb-accent); }
+select.sb-tool { padding-right: 6px; }
+
+.sb-canvas {
+  min-height: 0;
+  overflow: auto;
+  padding: 28px;
+  background:
+    repeating-conic-gradient(var(--sb-app-bg) 0% 25%, transparent 0% 50%) 50% / 18px 18px;
+}
+.sb-canvas--grid { background-color: var(--sb-app-bg); }
+.sb-canvas__stage {
+  margin: 0 auto;
+  background: var(--sb-canvas-bg, #ffffff);
+  border-radius: 10px;
+  border: 1px solid var(--sb-border);
+  padding: 32px;
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: max-width 180ms ease;
+}
+.sb-canvas__inner { transform-origin: center center; }
+
+/* Story layout helpers used by the stories themselves */
+.sb-row    { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+.sb-col    { display: flex; flex-direction: column; gap: 16px; }
+.sb-matrix { display: grid; gap: 16px 20px; align-items: center; justify-items: start; }
+.sb-label  {
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #73828c;
+  white-space: nowrap;
+}
+
+/* ---------- Addon panel ---------- */
+
+.sb-panel {
+  display: flex;
+  flex-direction: column;
+  height: var(--sb-panel-h);
+  min-height: 0;
+  background: var(--sb-surface);
+  border-top: 1px solid var(--sb-border);
+}
+.sb-panel[data-collapsed="true"] { height: auto; }
+.sb-panel[data-collapsed="true"] .sb-panel__body { display: none; }
+
+.sb-panel__tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 8px;
+  border-bottom: 1px solid var(--sb-border);
+}
+.sb-panel__tab {
+  padding: 9px 12px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--sb-text-muted);
+}
+.sb-panel__tab[aria-selected="true"] { color: var(--sb-text); border-bottom-color: var(--sb-accent); }
+.sb-panel__count {
+  display: inline-block;
+  margin-left: 5px;
+  padding: 0 5px;
+  border-radius: 8px;
+  background: var(--sb-app-bg);
+  font-size: 10px;
+  color: var(--sb-text-muted);
+}
+.sb-panel__collapse { margin-left: auto; }
+
+.sb-panel__body { flex: 1; min-height: 0; overflow: auto; padding: 12px 14px; }
+.sb-panel__view[hidden] { display: none; }
+
+/* Controls table */
+.sb-controls { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.sb-controls th {
+  text-align: left;
+  padding: 6px 10px;
+  color: var(--sb-text-muted);
+  font-weight: 600;
+  border-bottom: 1px solid var(--sb-border);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.sb-controls td { padding: 7px 10px; border-bottom: 1px solid var(--sb-border); vertical-align: middle; }
+.sb-controls tr:last-child td { border-bottom: 0; }
+.sb-controls__name { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-weight: 600; }
+.sb-controls__desc { color: var(--sb-text-muted); }
+.sb-controls select,
+.sb-controls input[type="text"],
+.sb-controls input[type="number"] {
+  width: 100%;
+  max-width: 230px;
+  padding: 5px 7px;
+  border: 1px solid var(--sb-border);
+  border-radius: 5px;
+  background: var(--sb-app-bg);
+  color: var(--sb-text);
+  font: inherit;
+  font-size: 12px;
+}
+.sb-controls input[type="range"] { width: 100%; max-width: 230px; accent-color: var(--sb-accent); }
+.sb-controls input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--sb-accent); }
+.sb-controls__radios { display: flex; flex-wrap: wrap; gap: 4px; }
+.sb-controls__radio {
+  padding: 4px 9px;
+  border: 1px solid var(--sb-border);
+  border-radius: 20px;
+  background: var(--sb-app-bg);
+  color: var(--sb-text);
+  font: inherit;
+  font-size: 11.5px;
+  cursor: pointer;
+}
+.sb-controls__radio[aria-pressed="true"] {
+  background: var(--sb-accent);
+  border-color: var(--sb-accent);
+  color: #2b1708;
+  font-weight: 600;
+}
+.sb-controls__reset { margin-top: 10px; }
+
+/* Code + docs views */
+.sb-code {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--sb-code-bg);
+  color: var(--sb-code-text);
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  overflow-x: auto;
+  white-space: pre;
+  tab-size: 2;
+}
+.sb-code .t   { color: #7ddcff; }
+.sb-code .a   { color: #ffb86c; }
+.sb-code .v   { color: #b5f4a5; }
+.sb-code .c   { color: #7c8593; }
+
+.sb-docs { font-size: 13px; line-height: 1.6; max-width: 70ch; }
+.sb-docs h3 { font-family: var(--font-display); font-size: 15px; margin: 0 0 6px; }
+.sb-docs p  { margin: 0 0 10px; color: var(--sb-text-muted); }
+.sb-docs ul { margin: 0 0 10px; padding-left: 18px; color: var(--sb-text-muted); }
+.sb-docs code {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 11.5px;
+  background: var(--sb-app-bg);
+  border: 1px solid var(--sb-border);
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+.sb-docs a { color: var(--sb-accent); }
+.sb-docs__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.sb-docs__chip {
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: var(--sb-accent-soft);
+  border: 1px solid var(--sb-border);
+  font-size: 11px;
+  color: var(--sb-text);
+}
+
+/* Tokens view */
+.sb-tokens {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+  width: min(760px, 100%);
+}
+.sb-token {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px;
+  border: 1px solid var(--sb-border);
+  border-radius: 8px;
+}
+.sb-token__swatch {
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border-radius: 6px;
+  border: 1px solid var(--sb-border);
+}
+.sb-token__name { font-size: 11px; font-weight: 600; word-break: break-all; }
+.sb-token__value {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 10.5px;
+  color: var(--sb-text-muted);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 860px) {
+  .sb { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .sb-sidebar { max-height: 210px; }
+  .sb-canvas { padding: 16px; }
+  .sb-canvas__stage { padding: 20px; }
+  :root { --sb-panel-h: 240px; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="sb">
+
+  <!-- ============ Sidebar ============ -->
+  <aside class="sb-sidebar">
+    <div class="sb-brand">
+      <span class="sb-brand__mark">P</span>
+      <span>
+        <span class="sb-brand__name">Peau App</span><br>
+        <span class="sb-brand__sub">Design system · Storybook</span>
+      </span>
+    </div>
+
+    <div class="sb-search">
+      <input id="sb-search" type="search" placeholder="Find components…" aria-label="Find components">
+    </div>
+
+    <nav class="sb-tree" id="sb-tree" aria-label="Components"></nav>
+  </aside>
+
+  <!-- ============ Main ============ -->
+  <main class="sb-main">
+
+    <div class="sb-toolbar">
+      <span class="sb-toolbar__title" id="sb-title"></span>
+
+      <select class="sb-tool" id="sb-bg" aria-label="Canvas background">
+        <option value="light">Surface</option>
+        <option value="container">Primary container</option>
+        <option value="dark">On surface</option>
+        <option value="grid">Grid</option>
+      </select>
+
+      <select class="sb-tool" id="sb-viewport" aria-label="Viewport">
+        <option value="auto">Auto width</option>
+        <option value="mobile">Mobile · 412px</option>
+        <option value="tablet">Tablet · 768px</option>
+        <option value="desktop">Desktop · 1140px</option>
+      </select>
+
+      <select class="sb-tool" id="sb-zoom" aria-label="Zoom">
+        <option value="0.75">75%</option>
+        <option value="1" selected>100%</option>
+        <option value="1.25">125%</option>
+        <option value="1.5">150%</option>
+      </select>
+
+      <button class="sb-tool" id="sb-theme" type="button" aria-pressed="false">🌙 Dark UI</button>
+      <button class="sb-tool" id="sb-copy" type="button">Copy HTML</button>
+      <a class="sb-tool" id="sb-figma" href="#" target="_blank" rel="noopener">Open in Figma ↗</a>
+    </div>
+
+    <div class="sb-canvas sb-canvas--grid" id="sb-canvas">
+      <div class="sb-canvas__stage" id="sb-stage">
+        <div class="sb-canvas__inner" id="sb-inner"></div>
+      </div>
+    </div>
+
+    <!-- ============ Addon panel ============ -->
+    <section class="sb-panel" id="sb-panel" data-collapsed="false">
+      <div class="sb-panel__tabs" role="tablist">
+        <button class="sb-panel__tab" data-view="controls" role="tab" aria-selected="true">
+          Controls<span class="sb-panel__count" id="sb-ctrl-count">0</span>
+        </button>
+        <button class="sb-panel__tab" data-view="code" role="tab" aria-selected="false">Code</button>
+        <button class="sb-panel__tab" data-view="docs" role="tab" aria-selected="false">Docs</button>
+        <button class="sb-tool sb-panel__collapse" id="sb-panel-toggle" type="button">Hide addons</button>
+      </div>
+
+      <div class="sb-panel__body">
+        <div class="sb-panel__view" id="sb-view-controls" role="tabpanel"></div>
+        <div class="sb-panel__view" id="sb-view-code" role="tabpanel" hidden></div>
+        <div class="sb-panel__view" id="sb-view-docs" role="tabpanel" hidden></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+/* ============================================================
+   Story registry for the Peau App component library.
+
+   Each story mirrors a component set on the Figma page
+   "Components (Adjusted)" — the `args` are the component's real
+   Figma variant properties, and `figma` links back to the node.
+   ============================================================ */
+
+const FIGMA_FILE = "https://www.figma.com/design/fAjGnlWWU5b4eE3OQAmBOr/Peau-App_New";
+const node = (id) => `${FIGMA_FILE}?node-id=${id.replace(":", "-")}`;
+
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+const icon = (name) => `<span class="peau-icon" aria-hidden="true">${name}</span>`;
+
+/* Renders a labelled grid of every combination of one arg — used by
+   the "All variants" stories so the canvas mirrors the Figma matrix. */
+const matrix = (cols, rows, cell, colLabel = String, rowLabel = String) => {
+  let html = `<div class="sb-matrix" style="grid-template-columns:auto repeat(${cols.length},auto)">`;
+  html += `<span></span>`;
+  cols.forEach((c) => { html += `<span class="sb-label">${esc(colLabel(c))}</span>`; });
+  rows.forEach((r) => {
+    html += `<span class="sb-label">${esc(rowLabel(r))}</span>`;
+    cols.forEach((c) => { html += `<div>${cell(c, r)}</div>`; });
+  });
+  return html + `</div>`;
+};
+
+const STATES = ["Enabled", "Hovered", "Focused", "Pressed", "Disabled"];
+const stateClass = (p, s) => (s === "Enabled" ? "" : ` ${p}--${s.toLowerCase()}`);
+
+/* ------------------------------------------------------------------ */
+
+const STORIES = [
+
+/* ================= BUTTONS ================= */
+{
+  id: "button--playground",
+  group: "Actions",
+  component: "Button",
+  name: "Playground",
+  figma: "60883:83723",
+  docs: {
+    text: "Buttons communicate actions that users can take.",
+    bullets: [
+      "Can contain an optional leading icon",
+      "Colour options in this file: filled, text and outlined",
+      "Five sizes: extra small, small, medium, large, extra large",
+      "Two shapes: round and square",
+      "Keep labels concise and use sentence-case",
+    ],
+    link: "https://m3.material.io/components/buttons/overview",
+  },
+  args: {
+    variant:  { control: "radio",   options: ["filled", "text", "outline"], value: "filled", desc: "Figma: Button / Button - text / Button - outline" },
+    type:     { control: "radio",   options: ["Round", "Square"], value: "Round", desc: "Shape" },
+    size:     { control: "select",  options: ["XSmall", "Small", "Medium", "Large", "XLarge"], value: "Medium", desc: "Size" },
+    state:    { control: "select",  options: STATES, value: "Enabled", desc: "Interaction state" },
+    showIcon: { control: "boolean", value: false, desc: "Leading icon" },
+    icon:     { control: "text",    value: "add", desc: "Material Symbols glyph name" },
+    labelText:{ control: "text",    value: "Upgrade", desc: "Label" },
+  },
+  render: (a) => button(a),
+},
+{
+  id: "button--all-sizes",
+  group: "Actions",
+  component: "Button",
+  name: "All sizes",
+  figma: "60883:83723",
+  docs: { text: "Every size at rest, round and square, exactly as laid out in the Figma variant matrix." },
+  args: {
+    variant:  { control: "radio",   options: ["filled", "text", "outline"], value: "filled" },
+    showIcon: { control: "boolean", value: false },
+  },
+  render: (a) => matrix(
+    ["XSmall", "Small", "Medium", "Large", "XLarge"],
+    ["Round", "Square"],
+    (size, type) => button({ ...a, size, type, state: "Enabled", labelText: "Upgrade", icon: "add" })
+  ),
+},
+{
+  id: "button--all-states",
+  group: "Actions",
+  component: "Button",
+  name: "All states",
+  figma: "60883:83723",
+  docs: {
+    text: "State layers come straight from the Figma tokens: hover and pressed use States/Secondary 8%, focus uses States/Secondary 12% plus a 3px focus indicator, and disabled fills with States/Disabled at 38% content opacity.",
+  },
+  args: {
+    variant: { control: "radio",  options: ["filled", "text", "outline"], value: "filled" },
+    size:    { control: "select", options: ["XSmall", "Small", "Medium"], value: "Medium" },
+  },
+  render: (a) => matrix(
+    STATES,
+    ["Round", "Square"],
+    (state, type) => button({ ...a, state, type, labelText: "Upgrade", showIcon: false })
+  ),
+},
+
+/* ================= ICON BUTTON ================= */
+{
+  id: "icon-button--playground",
+  group: "Actions",
+  component: "Icon button",
+  name: "Playground",
+  figma: "60883:84536",
+  docs: {
+    text: "Icon buttons are used for the lowest-priority actions, especially when presenting multiple options. Standard icon buttons have no container until they are interacted with.",
+    link: "https://m3.material.io/components/icon-buttons/overview",
+  },
+  args: {
+    variant: { control: "select",  options: ["filled", "tonal", "outline", "standard"], value: "filled" },
+    size:    { control: "select",  options: ["xs", "s", "m", "l", "xl"], value: "s" },
+    type:    { control: "radio",   options: ["Round", "Square"], value: "Round" },
+    state:   { control: "select",  options: STATES, value: "Enabled" },
+    icon:    { control: "text",    value: "favorite" },
+  },
+  render: (a) => iconButton(a),
+},
+{
+  id: "icon-button--all-variants",
+  group: "Actions",
+  component: "Icon button",
+  name: "All variants",
+  figma: "60883:84536",
+  docs: { text: "The four container styles across every interaction state." },
+  args: { size: { control: "select", options: ["xs", "s", "m"], value: "s" } },
+  render: (a) => matrix(
+    STATES,
+    ["filled", "tonal", "outline", "standard"],
+    (state, variant) => iconButton({ ...a, state, variant, icon: "favorite", type: "Round" })
+  ),
+},
+
+/* ================= TEXT FIELD ================= */
+{
+  id: "text-field--playground",
+  group: "Inputs",
+  component: "Text field",
+  name: "Playground",
+  figma: "60880:64325",
+  docs: {
+    text: "Use a text field when someone needs to enter text into a UI, such as filling in contact or payment information. Supporting text can be toggled between hide and show.",
+    link: "https://m3.material.io/components/text-fields/overview",
+  },
+  args: {
+    state:              { control: "select",  options: ["Enabled", "Hovered", "Focused", "Error", "Disabled"], value: "Enabled" },
+    textConfiguration:  { control: "select",  options: ["Label text", "Input text", "Placeholder text"], value: "Label text" },
+    leadingIcon:        { control: "boolean", value: false },
+    trailingIcon:       { control: "boolean", value: false },
+    showSupportingText: { control: "boolean", value: true },
+    labelText:          { control: "text",    value: "Label" },
+    supportingText:     { control: "text",    value: "Supporting text" },
+  },
+  render: (a) => `<div style="padding-bottom:24px">${textField(a)}</div>`,
+},
+{
+  id: "text-field--all-states",
+  group: "Inputs",
+  component: "Text field",
+  name: "All states",
+  figma: "60880:64325",
+  docs: { text: "Outlined style across every state and text configuration — the full Figma matrix." },
+  args: {
+    leadingIcon:  { control: "boolean", value: false },
+    trailingIcon: { control: "boolean", value: false },
+  },
+  render: (a) => `<div style="padding-bottom:24px">` + matrix(
+    ["Enabled", "Hovered", "Focused", "Error", "Disabled"],
+    ["Label text", "Input text", "Placeholder text"],
+    (state, textConfiguration) => textField({
+      ...a, state, textConfiguration,
+      labelText: "Label", supportingText: "Supporting text", showSupportingText: false,
+    })
+  ) + `</div>`,
+},
+
+/* ================= SELECTION CONTROLS ================= */
+{
+  id: "checkbox--playground",
+  group: "Inputs",
+  component: "Checkbox",
+  name: "Playground",
+  figma: "60880:64165",
+  docs: {
+    text: "Checkboxes allow users to select one or more options from a set, present a list containing sub-selections, and turn an item on or off.",
+    link: "https://m3.material.io/components/checkbox/overview",
+  },
+  args: {
+    type:  { control: "select", options: ["Selected", "Unselected", "Indeterminate", "Error selected", "Error unselected", "Error indeterminate"], value: "Selected" },
+    state: { control: "select", options: STATES, value: "Enabled" },
+  },
+  render: (a) => checkbox(a),
+},
+{
+  id: "checkbox--all-variants",
+  group: "Inputs",
+  component: "Checkbox",
+  name: "All variants",
+  figma: "60880:64165",
+  docs: { text: "Six types across five states — 30 variants, matching the Figma component set exactly." },
+  args: {},
+  render: () => matrix(
+    STATES,
+    ["Selected", "Indeterminate", "Unselected", "Error selected", "Error indeterminate", "Error unselected"],
+    (state, type) => checkbox({ type, state })
+  ),
+},
+{
+  id: "radio--playground",
+  group: "Inputs",
+  component: "Radio button",
+  name: "Playground",
+  figma: "60880:65267",
+  docs: {
+    text: "Radio buttons are the recommended way to allow users to make a single selection from a list of options.",
+    link: "https://m3.material.io/components/radio-button/overview",
+  },
+  args: {
+    selected: { control: "boolean", value: true },
+    state:    { control: "select",  options: STATES, value: "Enabled" },
+  },
+  render: (a) => radio(a),
+},
+{
+  id: "radio--all-variants",
+  group: "Inputs",
+  component: "Radio button",
+  name: "All variants",
+  figma: "60880:65267",
+  docs: { text: "Selected radios tint their state layer with States/Primary; unselected ones use States/Secondary." },
+  args: {},
+  render: () => matrix(STATES, [true, false],
+    (state, selected) => radio({ selected, state }),
+    String, (s) => (s ? "Selected" : "Unselected")),
+},
+{
+  id: "switch--playground",
+  group: "Inputs",
+  component: "Switch",
+  name: "Playground",
+  figma: "60880:53257",
+  docs: {
+    text: "Switches are the preferred way to adjust settings. They're used to control binary options — think On/Off or True/False.",
+    link: "https://m3.material.io/components/switch/overview",
+  },
+  args: {
+    selected: { control: "boolean", value: true },
+    state:    { control: "select",  options: STATES, value: "Enabled" },
+    showIcon: { control: "boolean", value: false, desc: "Figma: Icon=True" },
+  },
+  render: (a) => switchCtl(a),
+},
+{
+  id: "switch--all-variants",
+  group: "Inputs",
+  component: "Switch",
+  name: "All variants",
+  figma: "60880:53257",
+  docs: { text: "Selected × State × Icon — the 20 variants in the Figma set. The off track is an outlined Schemes/Primary container with a smaller Schemes/Secondary-variant handle." },
+  args: {},
+  render: () => matrix(STATES,
+    [[true, false], [true, true], [false, false], [false, true]],
+    (state, [selected, showIcon]) => switchCtl({ selected, state, showIcon }),
+    String, ([sel, ic]) => `${sel ? "On" : "Off"}${ic ? " · icon" : ""}`),
+},
+
+/* ================= SLIDER ================= */
+{
+  id: "slider--playground",
+  group: "Inputs",
+  component: "Slider",
+  name: "Playground",
+  figma: "60880:53417",
+  docs: {
+    text: "Sliders let users make selections from a range of values. The Figma building blocks define a 4×44 handle, 4×4 track stops and a 16px-tall track.",
+    link: "https://m3.material.io/components/sliders/overview",
+  },
+  args: {
+    type:          { control: "radio",   options: ["Standard", "Centered", "Range"], value: "Standard" },
+    value:         { control: "range",   min: 0, max: 100, step: 1, value: 40 },
+    valueEnd:      { control: "range",   min: 0, max: 100, step: 1, value: 75, desc: "Range slider upper handle" },
+    showStops:     { control: "boolean", value: false },
+    showValueLabel:{ control: "boolean", value: false },
+  },
+  render: (a) => `<div style="padding-top:52px">${slider(a)}</div>`,
+},
+
+/* ================= BADGE / DIVIDER / CHIP ================= */
+{
+  id: "badge--all-sizes",
+  group: "Data display",
+  component: "Badge",
+  name: "All sizes",
+  figma: "55343:13544",
+  docs: {
+    text: "Badges show notifications, counts or status information. Small is a 6px dot; Large is a 16px pill that carries a number.",
+    link: "https://m3.material.io/components/badges/overview",
+  },
+  args: {
+    size:  { control: "radio", options: ["Small", "Large"], value: "Large" },
+    label: { control: "text",  value: "3" },
+  },
+  render: (a) => `<div class="sb-row" style="gap:32px">
+    <div class="sb-col" style="align-items:center;gap:8px">
+      ${badge(a)}
+      <span class="sb-label">Size=${esc(a.size)}</span>
+    </div>
+    <div class="sb-col" style="align-items:center;gap:8px">
+      <span style="position:relative;display:inline-flex">
+        ${icon("notifications")}
+        <span style="position:absolute;top:-2px;right:-6px">${badge(a)}</span>
+      </span>
+      <span class="sb-label">On an icon</span>
+    </div>
+  </div>`,
+},
+{
+  id: "divider--all-variants",
+  group: "Data display",
+  component: "Divider",
+  name: "All variants",
+  figma: "55412:15783",
+  docs: {
+    text: "Dividers separate content into clear groups. Full-width, inset (16dp) and middle-inset horizontal variants, plus verticals and a subhead variant.",
+    link: "https://m3.material.io/components/divider/overview",
+  },
+  args: {},
+  render: () => `<div class="sb-col" style="gap:28px">
+    <div class="sb-col" style="gap:8px">
+      <span class="sb-label">Horizontal / Full-width</span><hr class="peau-divider peau-divider--horizontal">
+      <span class="sb-label">Horizontal / Inset</span><hr class="peau-divider peau-divider--horizontal peau-divider--inset">
+      <span class="sb-label">Horizontal / Middle-inset</span><hr class="peau-divider peau-divider--horizontal peau-divider--middle-inset">
+      <span class="sb-label">Horizontal / Divider with subhead</span>
+      <div class="peau-divider-subhead">Subhead</div>
+    </div>
+    <div class="sb-row" style="gap:26px;align-items:flex-start">
+      <div class="sb-col" style="gap:8px;align-items:center">
+        <hr class="peau-divider peau-divider--vertical"><span class="sb-label">Full-width</span>
+      </div>
+      <div class="sb-col" style="gap:8px;align-items:center">
+        <hr class="peau-divider peau-divider--vertical" style="height:104px"><span class="sb-label">Inset</span>
+      </div>
+      <div class="sb-col" style="gap:8px;align-items:center">
+        <hr class="peau-divider peau-divider--vertical" style="height:88px"><span class="sb-label">Middle-inset</span>
+      </div>
+    </div>
+  </div>`,
+},
+{
+  id: "chip--playground",
+  group: "Data display",
+  component: "Chip",
+  name: "Playground",
+  figma: "62846:14230",
+  docs: { text: "Non-interactive chip from the Custom components frame — used for skin-type tags and microbiome labels in the Peau app." },
+  args: {
+    label:    { control: "text",    value: "Dry skin" },
+    selected: { control: "boolean", value: false },
+    showIcon: { control: "boolean", value: false },
+    icon:     { control: "text",    value: "check" },
+  },
+  render: (a) => chip(a),
+},
+
+/* ================= CARDS ================= */
+{
+  id: "card--playground",
+  group: "Containment",
+  component: "Card",
+  name: "Playground",
+  figma: "60885:92995",
+  docs: {
+    text: "Cards hold content and actions about a single subject. The Figma set covers stacked and horizontal layouts with media or a free slot.",
+    link: "https://m3.material.io/components/cards/overview",
+  },
+  args: {
+    style:   { control: "radio",  options: ["Elevated", "Outlined", "Filled"], value: "Elevated" },
+    layout:  { control: "radio",  options: ["Media & text", "Slot"], value: "Media & text" },
+    orientation: { control: "radio", options: ["Stacked", "Horizontal"], value: "Horizontal" },
+    title:   { control: "text",   value: "Hydration routine" },
+    text:    { control: "text",   value: "Your barrier is looking stronger this week." },
+    icon:    { control: "text",   value: "water_drop" },
+  },
+  render: (a) => card(a),
+},
+{
+  id: "card--all-variants",
+  group: "Containment",
+  component: "Card",
+  name: "All variants",
+  figma: "60885:92995",
+  docs: { text: "Both layouts in all three container styles." },
+  args: {},
+  render: () => matrix(
+    ["Elevated", "Outlined", "Filled"],
+    ["Horizontal", "Stacked"],
+    (style, orientation) => card({
+      style, orientation, layout: "Media & text",
+      title: "Hydration routine", text: "Barrier looking stronger.", icon: "water_drop",
+    })
+  ),
+},
+
+/* ================= APP BAR ================= */
+{
+  id: "app-bar--playground",
+  group: "Navigation",
+  component: "App bar",
+  name: "Playground",
+  figma: "58114:20521",
+  docs: {
+    text: "Top app bars display navigation, actions and text at the top of a screen. Elevation switches to On-scroll once content passes beneath.",
+    link: "https://m3.material.io/components/top-app-bar/overview",
+  },
+  args: {
+    configuration: { control: "select", options: ["Small", "Small-centered", "Small-image", "Search", "Medium", "Large"], value: "Small" },
+    elevation:     { control: "radio",  options: ["Flat", "On-scroll"], value: "Flat" },
+    headline:      { control: "text",   value: "My skin" },
+  },
+  render: (a) => appBar(a),
+},
+{
+  id: "app-bar--all-configurations",
+  group: "Navigation",
+  component: "App bar",
+  name: "All configurations",
+  figma: "58114:20565",
+  docs: { text: "All six configurations at both elevations — the complete Figma matrix." },
+  args: { elevation: { control: "radio", options: ["Flat", "On-scroll"], value: "Flat" } },
+  render: (a) => `<div class="sb-col" style="gap:14px">` +
+    ["Small", "Small-centered", "Small-image", "Search", "Medium", "Large"].map((c) =>
+      `<div class="sb-col" style="gap:6px">
+         <span class="sb-label">Configuration=${esc(c)}</span>
+         ${appBar({ ...a, configuration: c, headline: "My skin" })}
+       </div>`).join("") + `</div>`,
+},
+{
+  id: "tabs--playground",
+  group: "Navigation",
+  component: "Tabs",
+  name: "Playground",
+  figma: "60892:100945",
+  docs: {
+    text: "Tabs organise content across different screens and views. Primary tabs sit at the top of a screen; secondary tabs group content inside an area.",
+    link: "https://m3.material.io/components/tabs/overview",
+  },
+  args: {
+    style:         { control: "radio",  options: ["Primary", "Secondary"], value: "Primary" },
+    type:          { control: "radio",  options: ["Fixed", "Scrollable"], value: "Fixed" },
+    configuration: { control: "select", options: ["Label only", "Label & icon", "Icon only"], value: "Label only" },
+    activeIndex:   { control: "select", options: [0, 1, 2], value: 0 },
+  },
+  render: (a) => tabs(a),
+},
+{
+  id: "tabs--all-variants",
+  group: "Navigation",
+  component: "Tabs",
+  name: "All variants",
+  figma: "60892:101245",
+  docs: { text: "Style × Type × Configuration, laid out as in the Figma frame." },
+  args: {},
+  render: () => `<div class="sb-col" style="gap:18px">` +
+    [["Primary", "Label only"], ["Primary", "Label & icon"], ["Primary", "Icon only"],
+     ["Secondary", "Label only"], ["Secondary", "Label & icon"]].map(([style, configuration]) =>
+      `<div class="sb-row" style="gap:24px;align-items:flex-start">
+         ${["Fixed", "Scrollable"].map((type) =>
+           `<div class="sb-col" style="gap:6px">
+              <span class="sb-label">${esc(type)} · ${esc(style)} · ${esc(configuration)}</span>
+              ${tabs({ style, type, configuration, activeIndex: 0 })}
+            </div>`).join("")}
+       </div>`).join("") + `</div>`,
+},
+{
+  id: "menu--playground",
+  group: "Navigation",
+  component: "Menu",
+  name: "Playground",
+  figma: "60885:94830",
+  docs: {
+    text: "Menus display a list of choices on a temporary surface. Density shrinks the row height from 48dp to 40dp to 32dp.",
+    link: "https://m3.material.io/components/menus/overview",
+  },
+  args: {
+    density:      { control: "radio",   options: ["0", "-2", "-4"], value: "0" },
+    showLeading:  { control: "boolean", value: true },
+    showTrailing: { control: "boolean", value: false },
+  },
+  render: (a) => menu(a),
+},
+{
+  id: "list--playground",
+  group: "Containment",
+  component: "List",
+  name: "Playground",
+  figma: "60883:71215",
+  docs: {
+    text: "Lists are continuous, vertical indexes of text and images. Density shrinks the row from 72dp to 64dp to 56dp.",
+    link: "https://m3.material.io/components/lists/overview",
+  },
+  args: {
+    density:        { control: "radio",   options: ["0", "-2", "-4"], value: "0" },
+    showLeading:    { control: "boolean", value: true },
+    showSupporting: { control: "boolean", value: true },
+    showTrailing:   { control: "boolean", value: true },
+    showDividers:   { control: "boolean", value: true },
+  },
+  render: (a) => list(a),
+},
+
+/* ================= FEEDBACK ================= */
+{
+  id: "snackbar--playground",
+  group: "Feedback",
+  component: "Snackbar",
+  name: "Playground",
+  figma: "60880:53062",
+  docs: {
+    text: "Snackbars show short updates about app processes at the bottom of the screen.",
+    link: "https://m3.material.io/components/snackbar/overview",
+  },
+  args: {
+    configuration:       { control: "select",  options: ["Text only", "Text & action", "Text & longer action"], value: "Text & action" },
+    lines:               { control: "radio",   options: ["One line", "Two lines"], value: "One line" },
+    showCloseAffordance: { control: "boolean", value: false },
+    text:                { control: "text",    value: "Scan saved to your timeline" },
+    actionLabel:         { control: "text",    value: "Undo" },
+  },
+  render: (a) => snackbar(a),
+},
+{
+  id: "snackbar--all-variants",
+  group: "Feedback",
+  component: "Snackbar",
+  name: "All variants",
+  figma: "60880:53097",
+  docs: { text: "The ten configurations in the Figma set: three content shapes × one/two lines × close affordance." },
+  args: {},
+  render: () => `<div class="sb-col" style="gap:14px">` +
+    [["Text only", "One line"], ["Text & action", "One line"],
+     ["Text only", "Two lines"], ["Text & action", "Two lines"],
+     ["Text & longer action", "Two lines"]].flatMap(([configuration, lines]) =>
+      [false, true].map((showCloseAffordance) =>
+        `<div class="sb-col" style="gap:5px">
+           <span class="sb-label">${esc(configuration)} · ${esc(lines)}${showCloseAffordance ? " · close" : ""}</span>
+           ${snackbar({ configuration, lines, showCloseAffordance,
+             text: "Scan saved to your timeline", actionLabel: "Undo" })}
+         </div>`)).join("") + `</div>`,
+},
+{
+  id: "dialog--playground",
+  group: "Feedback",
+  component: "Dialog",
+  name: "Playground",
+  figma: "60880:65339",
+  docs: {
+    text: "Basic dialogs interrupt users with urgent information, details or actions.",
+    link: "https://m3.material.io/components/dialogs/overview",
+  },
+  args: {
+    showIcon:      { control: "boolean", value: false, desc: "Figma: Icon=True" },
+    headline:      { control: "text",    value: "Rescan your skin?" },
+    body:          { control: "text",    value: "Your last scan was 12 days ago. A fresh scan keeps your routine accurate." },
+    confirmLabel:  { control: "text",    value: "Scan now" },
+    dismissLabel:  { control: "text",    value: "Later" },
+  },
+  render: (a) => dialog(a),
+},
+{
+  id: "tooltip--all-variants",
+  group: "Feedback",
+  component: "Tooltip",
+  name: "All variants",
+  figma: "55412:16992",
+  docs: {
+    text: "Plain tooltips describe an element; rich tooltips add a subhead, body text and actions.",
+    link: "https://m3.material.io/components/tooltips/overview",
+  },
+  args: {},
+  render: () => `<div class="sb-col" style="gap:20px">
+    <div class="sb-col" style="gap:6px">
+      <span class="sb-label">Plain tooltip · Type=Single line</span>
+      <span class="peau-tooltip">Rescan</span>
+    </div>
+    <div class="sb-col" style="gap:6px">
+      <span class="sb-label">Plain tooltip · Type=Multi line</span>
+      <span class="peau-tooltip peau-tooltip--multi">Rescan your skin to refresh your routine recommendations</span>
+    </div>
+    <div class="sb-col" style="gap:6px">
+      <span class="sb-label">Rich tooltip</span>
+      <div class="peau-tooltip-rich">
+        <span class="peau-tooltip-rich__subhead">Microbiome diversity</span>
+        <span class="peau-tooltip-rich__body">A higher score means a broader mix of skin flora, which usually means a healthier barrier.</span>
+        <div class="peau-tooltip-rich__actions">
+          ${button({ variant: "text", size: "Small", type: "Round", state: "Enabled", labelText: "Learn more" })}
+        </div>
+      </div>
+    </div>
+  </div>`,
+},
+{
+  id: "progress--linear",
+  group: "Feedback",
+  component: "Progress indicator",
+  name: "Linear",
+  figma: "60892:107101",
+  docs: {
+    text: "Linear progress indicators. The Figma set covers Flat and Wave shapes at 4dp and 8dp thickness, determinate and indeterminate.",
+    link: "https://m3.material.io/components/progress-indicators/overview",
+  },
+  args: {
+    type:      { control: "radio",   options: ["Flat", "Wave"], value: "Flat" },
+    thickness: { control: "radio",   options: ["4 dp", "8 dp"], value: "4 dp" },
+    progress:  { control: "range",   min: 0, max: 100, step: 10, value: 50 },
+    indeterminate: { control: "boolean", value: false },
+  },
+  render: (a) => linearProgress(a),
+},
+{
+  id: "progress--circular",
+  group: "Feedback",
+  component: "Progress indicator",
+  name: "Circular",
+  figma: "60892:107588",
+  docs: { text: "Circular progress indicators at 4dp and 8dp, determinate and indeterminate." },
+  args: {
+    thickness:     { control: "radio",   options: ["4 dp", "8 dp"], value: "4 dp" },
+    progress:      { control: "range",   min: 0, max: 100, step: 10, value: 30 },
+    indeterminate: { control: "boolean", value: false },
+  },
+  render: (a) => circularProgress(a),
+},
+{
+  id: "loading--playground",
+  group: "Feedback",
+  component: "Loading indicator",
+  name: "Playground",
+  figma: "60892:108086",
+  docs: { text: "The Peau loading indicator morphs between shapes. Steps 1–7 in Figma are frames of that morph; here it animates continuously." },
+  args: {
+    showContainer: { control: "boolean", value: false },
+  },
+  render: (a) => `<div class="sb-row" style="gap:24px">
+    <span class="peau-loading${a.showContainer ? " peau-loading--container" : ""}"><span class="peau-loading__shape"></span></span>
+  </div>`,
+},
+
+/* ================= SHEETS & SEARCH ================= */
+{
+  id: "search--playground",
+  group: "Inputs",
+  component: "Search",
+  name: "Playground",
+  figma: "60892:98994",
+  docs: {
+    text: "The search bar from the app-bar building blocks — a 56dp pill on Schemes/Primary container.",
+    link: "https://m3.material.io/components/search/overview",
+  },
+  args: {
+    alignment:   { control: "radio",   options: ["Left aligned", "Centered"], value: "Left aligned" },
+    placeholder: { control: "text",    value: "Search products" },
+    showAvatar:  { control: "boolean", value: true },
+  },
+  render: (a) => searchBar(a),
+},
+{
+  id: "sheet--playground",
+  group: "Containment",
+  component: "Sheet",
+  name: "Playground",
+  figma: "60892:100694",
+  docs: {
+    text: "Bottom and side sheets show supplementary content anchored to an edge of the screen.",
+    link: "https://m3.material.io/components/bottom-sheets/overview",
+  },
+  args: {
+    kind:       { control: "radio",   options: ["Bottom", "Side"], value: "Bottom" },
+    title:      { control: "text",    value: "Filter products" },
+    showHandle: { control: "boolean", value: true },
+  },
+  render: (a) => sheet(a),
+},
+
+/* ================= FOUNDATIONS ================= */
+{
+  id: "foundations--colour",
+  group: "Foundations",
+  component: "Colour",
+  name: "Tokens",
+  figma: "60879:52981",
+  docs: { text: "Every colour variable published on the Figma page, resolved live from tokens.css." },
+  args: {},
+  render: () => tokenGrid([
+    "--schemes-primary", "--schemes-on-primary", "--schemes-primary-container",
+    "--schemes-secondary", "--schemes-secondary-variant", "--schemes-on-surface",
+    "--schemes-outline", "--schemes-surface", "--primary60",
+    "--states-primary-8", "--states-primary-12",
+    "--states-secondary-8", "--states-secondary-12", "--states-disabled",
+  ]),
+},
+{
+  id: "foundations--type",
+  group: "Foundations",
+  component: "Typography",
+  name: "Scale",
+  figma: "60879:52981",
+  docs: { text: "The M3 type roles used across the file. Display roles are set in Funnel Display, body roles in Funnel Sans." },
+  args: {},
+  render: () => [
+    ["Headline large", "--headline-large", "var(--font-display)"],
+    ["Headline small", "--headline-small", "var(--font-display)"],
+    ["Title medium",   "--title-medium",   "var(--font-display)"],
+    ["Title small",    "--title-small",    "var(--font-display)"],
+    ["Label large",    "--label-large",    "var(--font-display)"],
+    ["Body large",     "--body-large",     "var(--font-body)"],
+    ["Body medium",    "--body-medium",    "var(--font-body)"],
+    ["Body small",     "--body-small",     "var(--font-body)"],
+  ].map(([label, prefix, family]) =>
+    `<div style="display:flex;flex-direction:column;gap:2px;margin-bottom:18px">
+       <span class="sb-label">${esc(label)}</span>
+       <span style="font-family:${family};font-size:var(${prefix}-size);line-height:var(${prefix}-line);letter-spacing:var(${prefix}-track);color:var(--schemes-on-surface)">Healthy skin, understood</span>
+     </div>`).join(""),
+},
+{
+  id: "foundations--shape",
+  group: "Foundations",
+  component: "Shape",
+  name: "Corner radii",
+  figma: "60879:52981",
+  docs: { text: "Corner tokens from the Figma Corner collection." },
+  args: {},
+  render: () => `<div class="sb-row" style="gap:18px">` +
+    [["Extra small", "--corner-extra-small"], ["Small", "--corner-small"],
+     ["Medium", "--corner-medium"], ["Large", "--corner-large"],
+     ["Extra large", "--corner-extra-large"], ["Full", "--corner-full"]].map(([n, v]) =>
+      `<div class="sb-col" style="gap:6px;align-items:center">
+         <div style="width:72px;height:72px;background:var(--primary60);border-radius:var(${v})"></div>
+         <span class="sb-label">${esc(n)}</span>
+         <span class="sb-label" style="text-transform:none">var(${v})</span>
+       </div>`).join("") + `</div>`,
+},
+];
+
+/* ==================================================================
+   Component renderers — plain HTML strings, one per Figma component.
+   ================================================================== */
+
+function button(a) {
+  const variant = a.variant || "filled";
+  const size = (a.size || "Medium").toLowerCase();
+  const cls = [
+    "peau-btn",
+    `peau-btn--${size}`,
+    a.type === "Square" ? "peau-btn--square" : "",
+    variant !== "filled" ? `peau-btn--${variant}` : "",
+    stateClass("peau-btn", a.state || "Enabled").trim(),
+  ].filter(Boolean).join(" ");
+  const ic = a.showIcon ? icon(a.icon || "add") : "";
+  return `<button class="${cls}"${a.state === "Disabled" ? " disabled" : ""}>
+  <span class="peau-btn__content">
+    <span class="peau-btn__state-layer">${ic}<span class="peau-btn__label">${esc(a.labelText ?? "Upgrade")}</span></span>
+  </span>
+</button>`;
+}
+
+function iconButton(a) {
+  const variant = a.variant || "filled";
+  const cls = [
+    "peau-icon-btn",
+    a.size && a.size !== "s" ? `peau-icon-btn--${a.size}` : "",
+    a.type === "Square" ? "peau-icon-btn--square" : "",
+    variant !== "filled" ? `peau-icon-btn--${variant}` : "",
+    stateClass("peau-icon-btn", a.state || "Enabled").trim(),
+  ].filter(Boolean).join(" ");
+  return `<button class="${cls}" aria-label="${esc(a.icon || "favorite")}"${a.state === "Disabled" ? " disabled" : ""}>
+  <span class="peau-icon-btn__content">
+    <span class="peau-icon-btn__state-layer">${icon(a.icon || "favorite")}</span>
+  </span>
+</button>`;
+}
+
+function textField(a) {
+  const state = a.state || "Enabled";
+  const cfg = a.textConfiguration || "Label text";
+  const cls = `peau-textfield${state === "Enabled" ? "" : ` peau-textfield--${state.toLowerCase()}`}`;
+  let content;
+  if (cfg === "Input text") {
+    content = `<p class="peau-textfield__text peau-textfield__text--input">${esc(a.labelText || "Input")}</p>`;
+  } else if (cfg === "Placeholder text") {
+    content = `<p class="peau-textfield__text">${esc(a.labelText || "Placeholder")}</p>`;
+  } else {
+    content = `<p class="peau-textfield__text">${esc(a.labelText || "Label")}</p>`;
+  }
+  if (state === "Focused") content += `<span class="peau-textfield__caret"></span>`;
+  return `<div class="${cls}">
+  <div class="peau-textfield__box">
+    <div class="peau-textfield__state-layer">
+      ${a.leadingIcon ? icon("search") : ""}
+      <div class="peau-textfield__content">${content}</div>
+      ${a.trailingIcon ? icon("cancel") : ""}
+    </div>
+  </div>
+  ${a.showSupportingText ? `<div class="peau-textfield__supporting">${esc(a.supportingText || "Supporting text")}</div>` : ""}
+</div>`;
+}
+
+function checkbox(a) {
+  const type = a.type || "Selected";
+  const isError = type.startsWith("Error");
+  const base = isError ? type.replace("Error ", "") : type.toLowerCase();
+  const cls = [
+    "peau-checkbox",
+    base === "unselected" || base === "Unselected" ? "peau-checkbox--unselected" : "",
+    isError ? "peau-checkbox--error" : "",
+    stateClass("peau-checkbox", a.state || "Enabled").trim(),
+  ].filter(Boolean).join(" ");
+  const glyph = /indeterminate/i.test(type) ? "remove" : "check";
+  return `<span class="${cls}" role="checkbox" aria-checked="${/unselected/i.test(type) ? "false" : /indeterminate/i.test(type) ? "mixed" : "true"}" tabindex="0">
+  <span class="peau-checkbox__state-layer">
+    <span class="peau-checkbox__box"></span>
+    <span class="peau-icon peau-checkbox__mark">${glyph}</span>
+  </span>
+</span>`;
+}
+
+function radio(a) {
+  const cls = [
+    "peau-radio",
+    a.selected ? "peau-radio--selected" : "",
+    stateClass("peau-radio", a.state || "Enabled").trim(),
+  ].filter(Boolean).join(" ");
+  return `<span class="${cls}" role="radio" aria-checked="${!!a.selected}" tabindex="0">
+  <span class="peau-radio__container">
+    <span class="peau-radio__state-layer"><span class="peau-radio__icon"></span></span>
+  </span>
+</span>`;
+}
+
+function switchCtl(a) {
+  const cls = [
+    "peau-switch",
+    a.selected ? "" : "peau-switch--off",
+    stateClass("peau-switch", a.state || "Enabled").trim(),
+  ].filter(Boolean).join(" ");
+  const glyph = a.showIcon ? icon(a.selected ? "check" : "close") : "";
+  return `<span class="${cls}" role="switch" aria-checked="${!!a.selected}" tabindex="0">
+  <span class="peau-switch__handle">
+    <span class="peau-switch__target">
+      <span class="peau-switch__state-layer">
+        <span class="peau-switch__shape">${glyph}</span>
+      </span>
+    </span>
+  </span>
+</span>`;
+}
+
+function slider(a) {
+  const type = a.type || "Standard";
+  const v = Number(a.value ?? 40);
+  const v2 = Number(a.valueEnd ?? 75);
+  let activeStyle;
+  if (type === "Range") {
+    const lo = Math.min(v, v2), hi = Math.max(v, v2);
+    activeStyle = `left:${lo}%;width:${hi - lo}%`;
+  } else if (type === "Centered") {
+    const lo = Math.min(50, v), hi = Math.max(50, v);
+    activeStyle = `left:${lo}%;width:${hi - lo}%`;
+  } else {
+    activeStyle = `left:0;width:${v}%`;
+  }
+  const stops = a.showStops
+    ? `<span class="peau-slider__stops">${Array.from({ length: 11 }, () => `<span class="peau-slider__stop"></span>`).join("")}</span>`
+    : "";
+  const handle = (pos) => `<span class="peau-slider__handle" style="left:${pos}%"></span>`;
+  const valueLabel = (pos, val) => a.showValueLabel
+    ? `<span class="peau-slider__value" style="left:${pos}%">${val}</span>` : "";
+  return `<div class="peau-slider" role="slider" aria-valuenow="${v}" aria-valuemin="0" aria-valuemax="100" tabindex="0">
+  <span class="peau-slider__track">
+    <span class="peau-slider__active" style="${activeStyle}"></span>
+    ${stops}
+  </span>
+  ${handle(v)}${valueLabel(v, v)}
+  ${type === "Range" ? handle(v2) + valueLabel(v2, v2) : ""}
+</div>`;
+}
+
+function badge(a) {
+  const size = (a.size || "Large").toLowerCase();
+  return `<span class="peau-badge peau-badge--${size}">${size === "large" ? esc(a.label ?? "3") : ""}</span>`;
+}
+
+function chip(a) {
+  const cls = `peau-chip${a.selected ? " peau-chip--selected" : ""}`;
+  return `<span class="${cls}">${a.showIcon ? icon(a.icon || "check") : ""}${esc(a.label ?? "Dry skin")}</span>`;
+}
+
+function card(a) {
+  const styleMap = { Elevated: "elevated", Outlined: "outlined", Filled: "filled" };
+  const horizontal = a.orientation === "Horizontal";
+  const cls = [
+    "peau-card",
+    `peau-card--${styleMap[a.style] || "elevated"}`,
+    horizontal ? "peau-card--horizontal" : "peau-card--stacked",
+  ].join(" ");
+  if (a.layout === "Slot") {
+    return `<div class="${cls}" style="${horizontal ? "height:auto" : ""}">
+  <div class="peau-card__slot">Slot</div>
+</div>`;
+  }
+  return `<div class="${cls}">
+  <div class="peau-card__media">${icon(a.icon || "water_drop")}</div>
+  <div class="peau-card__body">
+    <span class="peau-card__title">${esc(a.title ?? "Hydration routine")}</span>
+    <span class="peau-card__text">${esc(a.text ?? "")}</span>
+  </div>
+</div>`;
+}
+
+function appBar(a) {
+  const cfg = a.configuration || "Small";
+  const onScroll = a.elevation === "On-scroll";
+  const cls = [
+    "peau-appbar",
+    onScroll ? "peau-appbar--on-scroll" : "",
+    cfg === "Small-centered" ? "peau-appbar--centered" : "",
+    cfg === "Medium" ? "peau-appbar--medium" : "",
+    cfg === "Large" ? "peau-appbar--large" : "",
+  ].filter(Boolean).join(" ");
+
+  if (cfg === "Search") {
+    return `<div class="${cls}">
+  <div class="peau-appbar__leading">${iconButton({ variant: "standard", icon: "menu", size: "s" })}</div>
+  ${searchBar({ alignment: "Left aligned", placeholder: "Search products", showAvatar: false, compact: true })}
+  <div class="peau-appbar__trailing">${iconButton({ variant: "standard", icon: "more_vert", size: "s" })}</div>
+</div>`;
+  }
+
+  const leading = cfg === "Small-image"
+    ? `<span class="peau-appbar__avatar">${icon("person")}</span>`
+    : iconButton({ variant: "standard", icon: "arrow_back", size: "s" });
+
+  return `<div class="${cls}">
+  <div class="peau-appbar__leading">${leading}</div>
+  <span class="peau-appbar__headline">${esc(a.headline ?? "My skin")}</span>
+  <div class="peau-appbar__trailing">
+    ${iconButton({ variant: "standard", icon: "search", size: "s" })}
+    ${iconButton({ variant: "standard", icon: "more_vert", size: "s" })}
+  </div>
+</div>`;
+}
+
+function searchBar(a) {
+  const cls = [
+    "peau-searchbar",
+    a.alignment === "Centered" ? "peau-searchbar--centered" : "",
+  ].filter(Boolean).join(" ");
+  const style = a.compact ? ' style="flex:1 0 0;min-width:0;width:auto;height:48px"' : "";
+  return `<div class="${cls}"${style}>
+  ${icon("search")}
+  <span class="peau-searchbar__label">${esc(a.placeholder ?? "Search products")}</span>
+  ${a.showAvatar ? `<span class="peau-appbar__avatar">${icon("person")}</span>` : ""}
+</div>`;
+}
+
+function tabs(a) {
+  const cfg = a.configuration || "Label only";
+  const cls = [
+    "peau-tabs",
+    `peau-tabs--${(a.style || "Primary").toLowerCase()}`,
+    a.type === "Scrollable" ? "peau-tabs--scrollable" : "",
+    cfg === "Label & icon" ? "peau-tabs--with-icon" : "",
+  ].filter(Boolean).join(" ");
+  const items = [
+    { label: "Skin", glyph: "face" },
+    { label: "Microbiome", glyph: "biotech" },
+    { label: "Products", glyph: "science" },
+  ];
+  const active = Number(a.activeIndex ?? 0);
+  const body = items.map((it, i) => {
+    const inner =
+      cfg === "Icon only" ? icon(it.glyph)
+      : cfg === "Label & icon" ? `${icon(it.glyph)}<span>${esc(it.label)}</span>`
+      : `<span>${esc(it.label)}</span>`;
+    return `<button class="peau-tab${i === active ? " peau-tab--active" : ""}" role="tab" aria-selected="${i === active}">${inner}</button>`;
+  }).join("");
+  return `<div class="${cls}" role="tablist">${body}</div>`;
+}
+
+function menu(a) {
+  const d = a.density === "0" || a.density === undefined ? "" : ` peau-menu--density-${a.density}`;
+  const items = [
+    { label: "Rescan", glyph: "photo_camera", trailing: "⌘R" },
+    { label: "Share", glyph: "share", trailing: "⌘S" },
+    { label: "Export", glyph: "download", trailing: "⌘E" },
+    { label: "Delete", glyph: "delete", trailing: "", disabled: true },
+  ];
+  return `<div class="peau-menu${d}" role="menu">` + items.map((it) =>
+    `<div class="peau-menu-item${it.disabled ? " peau-menu-item--disabled" : ""}" role="menuitem">
+       ${a.showLeading ? icon(it.glyph) : ""}
+       <span class="peau-menu-item__label">${esc(it.label)}</span>
+       ${a.showTrailing && it.trailing ? `<span class="sb-label" style="text-transform:none">${esc(it.trailing)}</span>` : ""}
+     </div>`).join("") + `</div>`;
+}
+
+function list(a) {
+  const d = a.density === "0" || a.density === undefined ? "" : ` peau-list--density-${a.density}`;
+  const items = [
+    { h: "Hydration", s: "Up 12% this week", t: "82", glyph: "water_drop" },
+    { h: "Barrier", s: "Stable", t: "74", glyph: "shield" },
+    { h: "Microbiome", s: "Needs attention", t: "61", glyph: "biotech" },
+  ];
+  return `<div class="peau-list${d}" role="list">` + items.map((it, i) =>
+    `<div class="peau-list-item" role="listitem">
+       ${a.showLeading ? `<span class="peau-list-item__leading">${icon(it.glyph)}</span>` : ""}
+       <span class="peau-list-item__content">
+         <span class="peau-list-item__headline">${esc(it.h)}</span>
+         ${a.showSupporting ? `<span class="peau-list-item__supporting">${esc(it.s)}</span>` : ""}
+       </span>
+       ${a.showTrailing ? `<span class="peau-list-item__trailing">${esc(it.t)}</span>` : ""}
+     </div>` +
+    (a.showDividers && i < items.length - 1
+      ? `<hr class="peau-divider peau-divider--horizontal peau-divider--inset" style="width:auto">` : "")
+  ).join("") + `</div>`;
+}
+
+function snackbar(a) {
+  const cfg = a.configuration || "Text & action";
+  const twoLines = a.lines === "Two lines";
+  const longer = cfg === "Text & longer action";
+  const cls = [
+    "peau-snackbar",
+    twoLines && !longer ? "peau-snackbar--two-lines" : "",
+    longer ? "peau-snackbar--stacked" : "",
+  ].filter(Boolean).join(" ");
+  const text = twoLines
+    ? `${esc(a.text ?? "")} — we'll keep tracking your barrier while you sleep.`
+    : esc(a.text ?? "");
+  const action = cfg !== "Text only"
+    ? `<button class="peau-snackbar__action">${esc(a.actionLabel ?? "Undo")}</button>` : "";
+  const close = a.showCloseAffordance
+    ? `<button class="peau-snackbar__close" aria-label="Dismiss">${icon("close")}</button>` : "";
+  return `<div class="${cls}" role="status">
+  <span class="peau-snackbar__text">${text}</span>
+  <span class="peau-snackbar__actions">${action}${close}</span>
+</div>`;
+}
+
+function dialog(a) {
+  return `<div class="peau-dialog${a.showIcon ? " peau-dialog--centered" : ""}" role="dialog" aria-modal="true">
+  ${a.showIcon ? `<span class="peau-dialog__icon">${icon("photo_camera")}</span>` : ""}
+  <span class="peau-dialog__headline">${esc(a.headline ?? "Rescan your skin?")}</span>
+  <span class="peau-dialog__body">${esc(a.body ?? "")}</span>
+  <div class="peau-dialog__actions">
+    ${button({ variant: "text", size: "Small", type: "Round", state: "Enabled", labelText: a.dismissLabel ?? "Later" })}
+    ${button({ variant: "text", size: "Small", type: "Round", state: "Enabled", labelText: a.confirmLabel ?? "Scan now" })}
+  </div>
+</div>`;
+}
+
+function linearProgress(a) {
+  const thick = a.thickness === "8 dp";
+  const cls = [
+    "peau-progress-linear",
+    thick ? "peau-progress-linear--8dp" : "",
+    a.type === "Wave" ? "peau-progress-linear--wave" : "",
+    a.indeterminate ? "peau-progress-linear--indeterminate" : "",
+  ].filter(Boolean).join(" ");
+  const p = Math.max(0, Math.min(100, Number(a.progress ?? 50)));
+  if (a.indeterminate) {
+    return `<div class="${cls}" role="progressbar">
+  <span class="peau-progress-linear__active" style="width:30%"></span>
+</div>`;
+  }
+  return `<div class="${cls}" role="progressbar" aria-valuenow="${p}" aria-valuemin="0" aria-valuemax="100">
+  <span class="peau-progress-linear__active" style="width:${p}%"></span>
+  <span class="peau-progress-linear__track"></span>
+  <span class="peau-progress-linear__stop"></span>
+</div>`;
+}
+
+function circularProgress(a) {
+  const stroke = a.thickness === "8 dp" ? 8 : 4;
+  const size = a.thickness === "8 dp" ? 44 : 40;
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  const p = Math.max(0, Math.min(100, Number(a.progress ?? 30)));
+  const offset = a.indeterminate ? c * 0.75 : c * (1 - p / 100);
+  const cls = `peau-progress-circular${a.indeterminate ? " peau-progress-circular--indeterminate" : ""}`;
+  return `<span class="${cls}" role="progressbar"${a.indeterminate ? "" : ` aria-valuenow="${p}"`}>
+  <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    ${a.indeterminate ? "" : `<circle class="peau-progress-circular__track" cx="${size / 2}" cy="${size / 2}" r="${r}" stroke-width="${stroke}"></circle>`}
+    <circle class="peau-progress-circular__active" cx="${size / 2}" cy="${size / 2}" r="${r}"
+            stroke-width="${stroke}" stroke-dasharray="${c.toFixed(2)}" stroke-dashoffset="${offset.toFixed(2)}"></circle>
+  </svg>
+</span>`;
+}
+
+function sheet(a) {
+  const side = a.kind === "Side";
+  return `<div class="peau-sheet peau-sheet--${side ? "side" : "bottom"}">
+  ${!side && a.showHandle ? `<span class="peau-sheet__drag-handle"></span>` : ""}
+  <div class="peau-sheet__header">
+    <span class="peau-sheet__header-title">${esc(a.title ?? "Filter products")}</span>
+    ${iconButton({ variant: "standard", icon: "close", size: "s" })}
+  </div>
+  <div class="peau-sheet__body">
+    ${list({ density: "-2", showLeading: true, showSupporting: false, showTrailing: false, showDividers: true })}
+  </div>
+</div>`;
+}
+
+function tokenGrid(names) {
+  const cs = getComputedStyle(document.documentElement);
+  return `<div class="sb-tokens">` + names.map((n) => {
+    const value = cs.getPropertyValue(n).trim();
+    return `<div class="sb-token">
+      <span class="sb-token__swatch" style="background:${value}"></span>
+      <span>
+        <span class="sb-token__name">${esc(n)}</span><br>
+        <span class="sb-token__value">${esc(value)}</span>
+      </span>
+    </div>`;
+  }).join("") + `</div>`;
+}
+
+
+/* ============================================================
+   Minimal Storybook-style runtime.
+   Reads STORIES from stories.js and drives the shell:
+   sidebar tree, canvas, controls, code and docs panels.
+   ============================================================ */
+
+(function () {
+  "use strict";
+
+  const $ = (sel, root = document) => root.querySelector(sel);
+
+  const el = {
+    tree:      $("#sb-tree"),
+    search:    $("#sb-search"),
+    title:     $("#sb-title"),
+    stage:     $("#sb-stage"),
+    inner:     $("#sb-inner"),
+    canvas:    $("#sb-canvas"),
+    panel:     $("#sb-panel"),
+    controls:  $("#sb-view-controls"),
+    code:      $("#sb-view-code"),
+    docs:      $("#sb-view-docs"),
+    ctrlCount: $("#sb-ctrl-count"),
+    figmaLink: $("#sb-figma"),
+  };
+
+  /* ---------- state ---------- */
+
+  const argsByStory = Object.create(null);
+  let current = null;
+
+  const defaultArgs = (story) => {
+    const out = {};
+    for (const [key, cfg] of Object.entries(story.args || {})) out[key] = cfg.value;
+    return out;
+  };
+
+  const argsFor = (story) => {
+    if (!argsByStory[story.id]) argsByStory[story.id] = defaultArgs(story);
+    return argsByStory[story.id];
+  };
+
+  /* ---------- sidebar ---------- */
+
+  function buildTree(filter = "") {
+    const q = filter.trim().toLowerCase();
+    const groups = new Map();
+
+    for (const story of STORIES) {
+      const haystack = `${story.group} ${story.component} ${story.name}`.toLowerCase();
+      if (q && !haystack.includes(q)) continue;
+      if (!groups.has(story.group)) groups.set(story.group, new Map());
+      const components = groups.get(story.group);
+      if (!components.has(story.component)) components.set(story.component, []);
+      components.get(story.component).push(story);
+    }
+
+    el.tree.innerHTML = "";
+
+    if (groups.size === 0) {
+      el.tree.innerHTML = `<p style="padding:12px 8px;font-size:12.5px;color:var(--sb-text-muted)">No components match “${escapeHtml(filter)}”.</p>`;
+      return;
+    }
+
+    for (const [groupName, components] of groups) {
+      for (const [componentName, stories] of components) {
+        const wrap = document.createElement("div");
+        wrap.className = "sb-tree__group";
+        const expanded = !!q || stories.some((s) => current && s.id === current.id);
+        wrap.setAttribute("aria-expanded", String(expanded));
+
+        const btn = document.createElement("button");
+        btn.className = "sb-tree__group-btn";
+        btn.type = "button";
+        btn.innerHTML =
+          `<span class="sb-tree__caret" aria-hidden="true">▸</span>` +
+          `<span>${escapeHtml(componentName)}</span>`;
+        btn.addEventListener("click", () => {
+          wrap.setAttribute("aria-expanded", wrap.getAttribute("aria-expanded") === "true" ? "false" : "true");
+        });
+        wrap.appendChild(btn);
+
+        const listEl = document.createElement("div");
+        listEl.className = "sb-tree__stories";
+        for (const story of stories) {
+          const s = document.createElement("button");
+          s.className = "sb-tree__story";
+          s.type = "button";
+          s.textContent = story.name;
+          s.dataset.storyId = story.id;
+          if (current && story.id === current.id) s.setAttribute("aria-current", "true");
+          s.addEventListener("click", () => selectStory(story.id, true));
+          listEl.appendChild(s);
+        }
+        wrap.appendChild(listEl);
+        el.tree.appendChild(wrap);
+      }
+    }
+  }
+
+  /* ---------- rendering ---------- */
+
+  function selectStory(id, pushHash) {
+    const story = STORIES.find((s) => s.id === id) || STORIES[0];
+    current = story;
+    if (pushHash) location.hash = `/story/${story.id}`;
+    buildTree(el.search.value);
+    renderStory();
+  }
+
+  function renderStory() {
+    const story = current;
+    const args = argsFor(story);
+
+    el.title.innerHTML =
+      `${escapeHtml(story.component)} <span>/ ${escapeHtml(story.name)}</span>`;
+    el.figmaLink.href = figmaUrl(story.figma);
+
+    let html;
+    try {
+      html = story.render(args);
+    } catch (err) {
+      html = `<p style="color:#b3261e;font-size:13px">Story failed to render: ${escapeHtml(err.message)}</p>`;
+    }
+    el.inner.innerHTML = `<div class="peau">${html}</div>`;
+
+    renderControls(story, args);
+    renderCode(html);
+    renderDocs(story);
+  }
+
+  /* ---------- controls addon ---------- */
+
+  function renderControls(story, args) {
+    const entries = Object.entries(story.args || {});
+    el.ctrlCount.textContent = entries.length;
+
+    if (entries.length === 0) {
+      el.controls.innerHTML =
+        `<p style="font-size:13px;color:var(--sb-text-muted)">This story has no controls — it renders the full variant matrix straight from the Figma component set.</p>`;
+      return;
+    }
+
+    let rows = "";
+    for (const [name, cfg] of entries) {
+      rows += `<tr>
+        <td class="sb-controls__name">${escapeHtml(name)}</td>
+        <td class="sb-controls__desc">${escapeHtml(cfg.desc || "")}</td>
+        <td data-control="${escapeHtml(name)}"></td>
+      </tr>`;
+    }
+
+    el.controls.innerHTML = `
+      <table class="sb-controls">
+        <thead><tr><th>Name</th><th>Description</th><th>Control</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <button class="sb-tool sb-controls__reset" type="button" id="sb-reset">Reset controls</button>`;
+
+    for (const [name, cfg] of entries) {
+      const cell = el.controls.querySelector(`[data-control="${cssEscape(name)}"]`);
+      cell.appendChild(buildControl(name, cfg, args));
+    }
+
+    $("#sb-reset").addEventListener("click", () => {
+      argsByStory[story.id] = defaultArgs(story);
+      renderStory();
+    });
+  }
+
+  function buildControl(name, cfg, args) {
+    const commit = (value) => {
+      args[name] = value;
+      renderStory();
+    };
+
+    if (cfg.control === "boolean") {
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.checked = !!args[name];
+      input.addEventListener("change", () => commit(input.checked));
+      return input;
+    }
+
+    if (cfg.control === "radio") {
+      const wrap = document.createElement("div");
+      wrap.className = "sb-controls__radios";
+      for (const opt of cfg.options) {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "sb-controls__radio";
+        b.textContent = String(opt);
+        b.setAttribute("aria-pressed", String(args[name] === opt));
+        b.addEventListener("click", () => commit(opt));
+        wrap.appendChild(b);
+      }
+      return wrap;
+    }
+
+    if (cfg.control === "select") {
+      const sel = document.createElement("select");
+      for (const opt of cfg.options) {
+        const o = document.createElement("option");
+        o.value = String(opt);
+        o.textContent = String(opt);
+        if (String(args[name]) === String(opt)) o.selected = true;
+        sel.appendChild(o);
+      }
+      sel.addEventListener("change", () => {
+        const raw = sel.value;
+        const match = cfg.options.find((o) => String(o) === raw);
+        commit(match);
+      });
+      return sel;
+    }
+
+    if (cfg.control === "range") {
+      const wrap = document.createElement("div");
+      wrap.style.display = "flex";
+      wrap.style.alignItems = "center";
+      wrap.style.gap = "8px";
+      const input = document.createElement("input");
+      input.type = "range";
+      input.min = cfg.min ?? 0;
+      input.max = cfg.max ?? 100;
+      input.step = cfg.step ?? 1;
+      input.value = args[name];
+      const out = document.createElement("span");
+      out.className = "sb-token__value";
+      out.textContent = args[name];
+      input.addEventListener("input", () => {
+        out.textContent = input.value;
+        commit(Number(input.value));
+      });
+      wrap.append(input, out);
+      return wrap;
+    }
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = args[name] ?? "";
+    input.addEventListener("input", () => commit(input.value));
+    return input;
+  }
+
+  /* ---------- code addon ---------- */
+
+  let lastCode = "";
+
+  function renderCode(html) {
+    lastCode = formatHtml(html);
+    el.code.innerHTML =
+      `<pre class="sb-code"><code>${highlight(lastCode)}</code></pre>`;
+  }
+
+  /* Re-indents the generated markup so the code panel is readable. */
+  function formatHtml(html) {
+    const tokens = html.replace(/>\s+</g, "><").split(/(<[^>]+>)/).filter((t) => t.trim() !== "");
+    let depth = 0;
+    const out = [];
+    for (const token of tokens) {
+      const isClose = /^<\//.test(token);
+      const isSelfClosing = /\/>$/.test(token) || /^<(hr|img|input|br)\b/i.test(token);
+      const isOpen = /^<[^/!]/.test(token) && !isSelfClosing;
+      if (isClose) depth = Math.max(0, depth - 1);
+      out.push("  ".repeat(depth) + token.trim());
+      if (isOpen) depth += 1;
+    }
+    return out.join("\n");
+  }
+
+  function highlight(code) {
+    return escapeHtml(code)
+      .replace(/(&lt;\/?)([a-zA-Z0-9-]+)/g, '$1<span class="t">$2</span>')
+      .replace(/([a-zA-Z-]+)=(&quot;[^&]*?&quot;)/g,
+        '<span class="a">$1</span>=<span class="v">$2</span>');
+  }
+
+  /* ---------- docs addon ---------- */
+
+  function renderDocs(story) {
+    const d = story.docs || {};
+    const args = story.args || {};
+    const chips = Object.keys(args).map((k) =>
+      `<span class="sb-docs__chip">${escapeHtml(k)}</span>`).join("");
+
+    el.docs.innerHTML = `
+      <div class="sb-docs">
+        <h3>${escapeHtml(story.component)}</h3>
+        ${chips ? `<div class="sb-docs__meta">${chips}</div>` : ""}
+        ${d.text ? `<p>${escapeHtml(d.text)}</p>` : ""}
+        ${d.bullets ? `<ul>${d.bullets.map((b) => `<li>${escapeHtml(b)}</li>`).join("")}</ul>` : ""}
+        <p>
+          Figma node <code>${escapeHtml(story.figma)}</code> —
+          <a href="${figmaUrl(story.figma)}" target="_blank" rel="noopener">open in Figma</a>
+          ${d.link ? ` · <a href="${escapeHtml(d.link)}" target="_blank" rel="noopener">Material 3 guidance</a>` : ""}
+        </p>
+      </div>`;
+  }
+
+  /* ---------- toolbar ---------- */
+
+  function initToolbar() {
+    // Panel tabs
+    document.querySelectorAll(".sb-panel__tab").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".sb-panel__tab").forEach((t) =>
+          t.setAttribute("aria-selected", String(t === tab)));
+        document.querySelectorAll(".sb-panel__view").forEach((v) => {
+          v.hidden = v.id !== `sb-view-${tab.dataset.view}`;
+        });
+      });
+    });
+
+    // Collapse panel
+    $("#sb-panel-toggle").addEventListener("click", (e) => {
+      const collapsed = el.panel.getAttribute("data-collapsed") === "true";
+      el.panel.setAttribute("data-collapsed", String(!collapsed));
+      e.currentTarget.textContent = collapsed ? "Hide addons" : "Show addons";
+    });
+
+    // Chrome theme
+    $("#sb-theme").addEventListener("click", (e) => {
+      const dark = document.documentElement.getAttribute("data-sb-theme") === "dark";
+      document.documentElement.setAttribute("data-sb-theme", dark ? "light" : "dark");
+      e.currentTarget.setAttribute("aria-pressed", String(!dark));
+      e.currentTarget.textContent = dark ? "🌙 Dark UI" : "☀️ Light UI";
+    });
+
+    // Canvas background
+    $("#sb-bg").addEventListener("change", (e) => {
+      const v = e.target.value;
+      el.stage.style.setProperty("--sb-canvas-bg",
+        v === "dark" ? "#2b1708" : v === "container" ? "#fff7f1" : "#ffffff");
+      el.canvas.classList.toggle("sb-canvas--grid", v !== "grid");
+    });
+
+    // Viewport
+    $("#sb-viewport").addEventListener("change", (e) => {
+      const map = { auto: "none", mobile: "412px", tablet: "768px", desktop: "1140px" };
+      el.stage.style.maxWidth = map[e.target.value];
+    });
+
+    // Zoom
+    $("#sb-zoom").addEventListener("change", (e) => {
+      el.inner.style.transform = `scale(${e.target.value})`;
+    });
+
+    // Copy code
+    $("#sb-copy").addEventListener("click", async (e) => {
+      const btn = e.currentTarget;
+      try {
+        await navigator.clipboard.writeText(lastCode);
+        btn.textContent = "✓ Copied";
+      } catch {
+        btn.textContent = "Copy failed";
+      }
+      setTimeout(() => { btn.textContent = "Copy HTML"; }, 1400);
+    });
+
+    // Sidebar search
+    el.search.addEventListener("input", () => buildTree(el.search.value));
+  }
+
+  /* ---------- helpers ---------- */
+
+  function figmaUrl(nodeId) {
+    return `https://www.figma.com/design/fAjGnlWWU5b4eE3OQAmBOr/Peau-App_New?node-id=${String(nodeId).replace(":", "-")}`;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"]/g, (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  }
+
+  function cssEscape(s) {
+    return window.CSS && CSS.escape ? CSS.escape(s) : String(s).replace(/[^\w-]/g, "\\$&");
+  }
+
+  function storyFromHash() {
+    const m = location.hash.match(/^#\/story\/(.+)$/);
+    return m ? decodeURIComponent(m[1]) : null;
+  }
+
+  /* ---------- boot ---------- */
+
+  initToolbar();
+  selectStory(storyFromHash() || STORIES[0].id, false);
+
+  window.addEventListener("hashchange", () => {
+    const id = storyFromHash();
+    if (id && (!current || id !== current.id)) selectStory(id, false);
+  });
+})();
+
+</script>
+</body>
+</html>
