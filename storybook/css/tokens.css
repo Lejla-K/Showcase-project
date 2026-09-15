@@ -1,0 +1,59 @@
+/* ============================================================
+   Peau App — Design tokens
+   Source: Figma "Peau App_New" › page "Components (Adjusted)"
+   https://www.figma.com/design/fAjGnlWWU5b4eE3OQAmBOr/Peau-App_New?node-id=60879-52981
+   Values pulled from Figma variables (M3 light theme, Peau scheme).
+   ============================================================ */
+
+:root {
+  /* ---- Color · schemes ---- */
+  --schemes-primary:            #fe8729;
+  --schemes-on-primary:         #2b1708;
+  --schemes-primary-container:  #fff7f1;
+  --schemes-secondary:          #2b1708;
+  --schemes-secondary-variant:  #6c4828;
+  --schemes-on-surface:         #2b1708;
+  --schemes-outline:            #c3bcb9;
+  --schemes-surface:            #ffffff;
+  --schemes-section-background: #ffffff;
+
+  /* ---- Color · primary variants ---- */
+  --primary60: #fdac6d;
+
+  /* ---- Color · state layers ---- */
+  --states-primary-8:    rgba(254, 135, 41, 0.08);
+  --states-primary-12:   rgba(254, 135, 41, 0.12);
+  --states-secondary-8:  rgba(43, 23, 8, 0.08);
+  --states-secondary-12: rgba(43, 23, 8, 0.12);
+  --states-disabled:     rgba(29, 27, 32, 0.10);
+  --states-disabled-content-opacity: 0.38;
+
+  /* ---- Shape · corner ---- */
+  --corner-none:        0px;
+  --corner-extra-small: 4px;
+  --corner-small:       8px;
+  --corner-medium:      12px;
+  --corner-large:       16px;
+  --corner-extra-large: 28px;
+  --corner-full:        1000px;
+
+  /* ---- Elevation ---- */
+  --elevation-0: none;
+  --elevation-1: 0 1px 2px rgba(43, 23, 8, 0.16), 0 1px 3px 1px rgba(43, 23, 8, 0.08);
+  --elevation-2: 0 1px 2px rgba(43, 23, 8, 0.16), 0 2px 6px 2px rgba(43, 23, 8, 0.08);
+  --elevation-3: 0 4px 8px 3px rgba(43, 23, 8, 0.08), 0 1px 3px rgba(43, 23, 8, 0.16);
+
+  /* ---- Typography · families ---- */
+  --font-display: "Funnel Display", "Trebuchet MS", "Segoe UI", sans-serif;
+  --font-body:    "Funnel Sans", "Segoe UI", system-ui, sans-serif;
+
+  /* ---- Typography · M3 roles (size / line-height / tracking) ---- */
+  --headline-large-size: 32px;  --headline-large-line: 40px;  --headline-large-track: 0px;
+  --headline-small-size: 24px;  --headline-small-line: 32px;  --headline-small-track: 0px;
+  --title-medium-size:   16px;  --title-medium-line:   24px;  --title-medium-track:   0.15px;
+  --title-small-size:    14px;  --title-small-line:    20px;  --title-small-track:    0.1px;
+  --label-large-size:    14px;  --label-large-line:    20px;  --label-large-track:    0.1px;
+  --body-large-size:     16px;  --body-large-line:     24px;  --body-large-track:     0.5px;
+  --body-medium-size:    14px;  --body-medium-line:    20px;  --body-medium-track:    0.25px;
+  --body-small-size:     12px;  --body-small-line:     16px;  --body-small-track:     0.4px;
+}
